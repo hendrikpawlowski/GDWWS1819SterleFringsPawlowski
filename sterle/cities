@@ -1,0 +1,52 @@
+[
+  {
+    "Stadt": "Berlin",
+    "Bundesland": "Berlin",
+    "Einwohnerzahl": 3520000
+  },
+  {
+    "Stadt": "Hamburg",
+    "Bundesland": "Hamburg",
+    "Einwohnerzahl": 1787000
+  },
+  {
+    "Stadt": "München",
+    "Bundesland": "Bayern",
+    "Einwohnerzahl": 1450000
+  },
+  {
+    "Stadt": "Köln",
+    "Bundesland": "Nordrhein-Westfalen",
+    "Einwohnerzahl": 1061000
+  },
+  {
+    "Stadt": "Stuttgart",
+    "Bundesland": "Baden-Württemberg",
+    "Einwohnerzahl": 623000
+  },
+  {
+    "Stadt": "Düsseldorf",
+    "Bundesland": "Nordrhein-Westfalen",
+    "Einwohnerzahl": 612000
+  },
+  {
+    "Stadt": "Dortmund",
+    "Bundesland": "Nordrhein-Westfalen",
+    "Einwohnerzahl": 586000
+  },
+  {
+    "Stadt": "Leipzig",
+    "Bundesland": "Sachsen",
+    "Einwohnerzahl": 560000
+  },
+  {
+    "Stadt": "Wuppertal",
+    "Bundesland": "Nordrhein-Westfalen",
+    "Einwohnerzahl": 350000
+  },
+  {
+    "Stadt": "Münster",
+    "Bundesland": "Nordrhein-Westfalen",
+    "Einwohnerzahl": 310000
+  },
+]
