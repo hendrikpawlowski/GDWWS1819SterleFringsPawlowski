@@ -43,10 +43,5 @@
     "Stadt": "Wuppertal",
     "Bundesland": "Nordrhein-Westfalen",
     "Einwohnerzahl": 350000
-  },
-  {
-    "Stadt": "Münster",
-    "Bundesland": "Nordrhein-Westfalen",
-    "Einwohnerzahl": 310000
-  },
+  }
 ]
