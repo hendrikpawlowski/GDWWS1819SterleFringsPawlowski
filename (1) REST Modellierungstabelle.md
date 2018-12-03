@@ -1,6 +1,8 @@
 | Ressource     | Verb          | Beschreibung | Statuscode   | Beschreibung Statuscode | Content Type |
 |:--------------|:--------------|:-------------|:-------------|:-------------|:-------------|
 | /kunde        | POST          |Erstellt einen neuen Kunden und liefert einen Location Header zurück, der den neuen Kunden mit einer URI spezifiziert| 201 | Created | JSON |
+|  |  |  | 400 | Bad Request |  |
+|  |  |  | 500 | Internal Error |  |
 |  | GET | Ein Request auf den aktuellen Kunden mit der jeweiligen kundenID | 200 | Ok | JSON |
 |  |  |  | 404 | Not Found |  |
 |  |  |  | 500 | Internal Error |  |
