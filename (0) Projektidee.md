@@ -1,4 +1,5 @@
 Problembeschreibung
+
 Es gibt mehrere Discounter mit denselben Produkten, jedoch unterschiedlichen Preisen.
 Des Weiteren hat jeder Discounter Vor- und Nachteile, wie beispielsweise Payback, einen Kaffeeautomat,
 oder Bioprodukte, … Unser System soll helfen, den richtigen Discounter zu finden.
