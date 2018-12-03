@@ -7,7 +7,9 @@
 |  |  |  | 404 | Not Found |  |
 |  |  |  | 500 | Internal Error |  |
 | /kunde/{kundeID} | PUT | Ein Update auf den aktuellen Kunden mit neuen Informationen | 200 | Ok | JSON |
-|  |  |  | 204 | No Content |  |
+|  |  |  | 404 | Not Found |  |
+|  |  |  | 409 | Conflict |  |
+|  |  |  | 500 | Internal Error |  |
 | /kunde/{kundeID} | DELETE | Ein Remove auf den aktuellen Kunden, der mittels einer URI ansprechbar ist|  |  |
 |  |  |  | 204 | No Content |  |
 |  |  |  | 404 | Not Found |  |
