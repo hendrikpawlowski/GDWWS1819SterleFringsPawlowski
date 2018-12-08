@@ -28,3 +28,6 @@
 |  |  |  | 404 | Not Found |  |
 |  |  |  | 405 | Not allowed |  |
 |  |  |  | 503 | Service Unavailable |  |
+| /produkt/{produktID} | GET | Ein Request auf das aktuelle Produkt mit der jeweiligen Produkt ID | 200 | Ok | JSON |
+|  |  |  | 404 | Not Found |  |
+|  |  |  | 500 | Internal Error |  |
