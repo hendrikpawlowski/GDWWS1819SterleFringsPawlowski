@@ -14,3 +14,4 @@
 |  |  |  | 404 | Not Found |  |
 |  |  |  | 405 | Not allowed |  |
 |  |  |  | 503 | Service Unavailable |  |
+| /einkaufsliste | POST | Erstellt eine neue Einkaufsliste und spezifiziert diese mit einer URI | 201 | CREATED | JSON |
