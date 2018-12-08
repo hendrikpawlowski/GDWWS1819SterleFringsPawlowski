@@ -31,3 +31,17 @@
 | /produkt/{produktID} | GET | Ein Request auf das aktuelle Produkt mit der jeweiligen Produkt ID | 200 | Ok | JSON |
 |  |  |  | 404 | Not Found |  |
 |  |  |  | 500 | Internal Error |  |
+| /discounter | POST | Erstellt einen neuen Discounter und spezifiziert diesen mit einer URI | 201 | Created | JSON |
+|  |  |  | 400 | Bad Request |  |
+|  |  |  | 500 | Internal Error |  |
+| /discounter/{discounterID} | GET | Ein Request auf den aktuelle Discounter mit der jeweiligen Discounter ID | 200 | Ok | JSON |
+|  |  |  | 404 | Not Found |  |
+|  |  |  | 500 | Internal Error |  |
+| /discounter/{discounterID} | PUT | Ein Update auf den aktuellen Discounter, der mittels einer URI ansprechbar ist | 200 | Ok |  |
+|  |  |  | 404 | Not Found |  |
+|  |  |  | 409 | Conflict |  |
+|  |  |  | 500 | Internal Error |  |
+| /discounter/{discounterID} | DELETE | Ein Remove auf den aktuellen Discounter, der mittels einer URI ansprechbar ist | 204 | No Content |  |
+|  |  |  | 404 | Not Found |  |
+|  |  |  | 405 | Not allowed |  |
+|  |  |  | 503 | Service Unavailable |  |
