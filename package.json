@@ -1,0 +1,22 @@
+{
+  "name": "sterle",
+  "version": "1.0.0",
+  "description": "Diese Applikation berechnet den Preis einer gegebenen Einkaufsliste",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hendrikpawlowski/GDWWS1819.git"
+  },
+  "author": "Dennis Sterle, Simon Frings, Hendrik Pawlowski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hendrikpawlowski/GDWWS1819/issues"
+  },
+  "homepage": "https://github.com/hendrikpawlowski/GDWWS1819#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
