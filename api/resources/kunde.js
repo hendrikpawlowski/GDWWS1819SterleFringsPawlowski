@@ -2,13 +2,17 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 
-const app = require('../../app');
+
+
 
 router.post("/", (req, res, next) => {
     const kunde = {
+        kundeID : req.body.kundeID,
         name: req.body.name
     }
     res.status(201).json({
+        "uri" : settungs.url + ":" + settings.port + "/kunde/" + 1234,
+        
         message: "Neuer Kunde wurde hinzugefügt",
         createdKunde: kunde
     });
