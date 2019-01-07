@@ -1,1 +1,1 @@
-[{"id":5,"name":"Dennis"},{"id":0,"name":"Dennis"},{"id":1,"name":"Dennis"},{"id":2,"name":"Dennis"}]
+[{"id":0,"name":"Simon","einkaufslisten":[2,3,4]},{"id":1,"name":"Dennis","einkaufslisten":[0]},{"id":2,"name":"Hendrik","einkaufslisten":[1]}]

@@ -2,21 +2,19 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 
-// Die lokale Datenbank wird in einem Array in der Variable kundenListe gespeichert
+// Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
-
 
 console.log(kundenListe);
 console.log(kundenListe.length);
 
-
 router.post("/", (req, res, next) => {
-    
 
     // Ein neuer Kunde wird erstellt
     const kunde = {
         id: generateNewID(),
-        name: req.body.name
+        name: req.body.name,
+        einkaufslisten: []
     }
 
     // Der Kunde wird dem Array hinzugefügt
@@ -29,7 +27,7 @@ router.post("/", (req, res, next) => {
 
     // 201 = CREATED
     res.status(201).json({
-        uri : "localhost:3001/kunde/" + 1234,
+        uri : "localhost:3001/kunde/" + kunde.id,
         createdKunde: kunde
     });
 })
@@ -39,7 +37,7 @@ router.post("/", (req, res, next) => {
 router.get("/", (req, res, next) => {
 
     res.status(200).json({
-        message: "Ein GET Request auf alle Kunden"
+        Kunden : kundenListe
     });
 })
 
