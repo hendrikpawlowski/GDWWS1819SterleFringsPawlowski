@@ -10,27 +10,8 @@ const produktRoutes = require('./api/resources/produkt');
 app.use(bodyParser.json())
 
 
-/*const Kunde = function(id, benutzername, passwort) {
-    this.id = id;
-    this.benutzername = benutzername;
-    this.passwort = passwort;
-    let einkaufsliste = new Array();
-}
 
-
-const Einkaufsliste = function(name) {
-    this.name = name;
-    let produkte = new Array();
-}
-
-var kunde1 = new Kunde(1234, "hendrik", "pass");
-
-module.exports = {
-    getKunde: function() {
-        return kunde1;
-    }
-}*/
-
+// Anfragen mit bestimmten URIs werden in die jeweiligen Skripte weitergeleitet
 app.use('/kunde', kundeRoutes);
 app.use('/einkaufsliste', einkaufslisteRoutes);
 app.use('/discounter', discounterRoutes);
@@ -38,16 +19,16 @@ app.use('/produkt', produktRoutes);
 
 
 
-
-
-
+// ERROR Handling
 app.use((req, res, next) => {
+    // 404 = Not Found
     const error = new Error('404 Not Found');
     error.status = 404;
     next(error);
 })
 
 app.use((error, req, res, next) => {
+    // 500 = Internal Error
     res.status(error.status || 500);
     res.json({
         error: {
