@@ -19,6 +19,8 @@ router.post("/", (req, res, next) => {
 
 
     for(let i = 0; i < kundenListe.length; i++){
+
+        //Prüfung, ob eingegebene KundenID in der Kundendatenbank vorhanden ist
         if(kundenListe[i].id == einkaufsliste.kundeID){
 
             const currentKunde = kundenListe[i];
@@ -32,7 +34,7 @@ router.post("/", (req, res, next) => {
                 if(error) throw error;
             });
 
-
+            // EinkaufslistenID wird dem zugehörigen Kunden in der Kundendatenbank (einem json-File) hinzugefügt
             currentKunde.einkaufslisten.push(einkaufsliste.id);
 
             fs.writeFile('kundenDatenbank.json', JSON.stringify(kundenListe), function(error){
@@ -40,7 +42,7 @@ router.post("/", (req, res, next) => {
             });
 
 
-
+            // 201 = CREATED
             res.status(201).json({
                 uri: "localhost:3001/einkaufsliste/" + einkaufsliste.id,
                 createdEinkaufsliste: einkaufsliste
