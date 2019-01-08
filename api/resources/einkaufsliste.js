@@ -3,9 +3,53 @@ const router = express.Router();
 const fs = require('fs');
 
 // Die lokale Einkaufslistendatenbank wird in einem Array in der Variable einkaufslisten gespeichert
-const einkaufslisten = require('../../einkaufslistenDatenbank');
 const kundenListe = require('../../kundenDatenbank');
 
+
+
+router.get("/:einkaufslisteID/", (req, res, next) => {
+
+    fs.readFile('./api/resources/currentUrlInformations.json', 'utf8',  (error, data) => {
+        
+        if(error) throw error;
+
+        // Es wird auf die kundeID aus app.js zugegriffen
+        const current = JSON.parse(data);
+        kundeID = current.kundeID;
+
+        // Auf die einkaufslisteID wird zugegriffen
+        const einkaufslisteID = req.params.einkaufslisteID;
+
+        // Der Kunde mit der jeweiligen Kunden ID wird gesucht
+        for(let i = 0; i < kundenListe.length; i++){
+
+            if(kundenListe[i].id == kundeID){
+
+                for(let j = 0; j < kundenListe[i].einkaufslisten.length; j++){
+
+                    if(kundenListe[i].einkaufslisten[j].id == einkaufslisteID){
+
+                        res.status(200).json({
+
+                            kunde: kundenListe[i],
+                            einkaufsliste: kundenListe[i].einkaufslisten
+                        })
+                    }
+                }
+            }
+        }
+        // Die Einkaufsliste auf den Kunden mit der übergebenen ID wurde nicht gefunden
+        // 404 = Not Found
+        // res.sendStatus(404);
+        // res.status(404).json({
+        //     message: "404 Not Found"
+        // });
+    })
+})
+
+
+
+/*
 console.log(einkaufslisten);
 console.log(einkaufslisten.length);
 
@@ -109,5 +153,6 @@ const generateNewID = function(){
         token = false;
     }
 }
+*/
 
 module.exports = router;

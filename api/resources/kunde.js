@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const einkaufslisteRoutes = require('./einkaufsliste');
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
 
+
+
 console.log(kundenListe);
-console.log(kundenListe.length);
+// console.log(kundenListe.length);
+
+
 
 router.post("/", (req, res, next) => {
 
@@ -56,7 +61,6 @@ router.get("/:kundeID", (req, res, next) => {
     }
 
     res.status(200).json({
-        message: "Ein GET auf Kunde " + id,
         kunde: currentKunde
     })
 })
@@ -74,8 +78,10 @@ router.put("/:kundeID", (req, res, next) => {
 
 router.delete("/:kundeID", (req, res, next) => {
 
-    res.status(200).json({
+    const kundeID = req.params.kundeID;
 
+    res.status(200).json({
+        message: "Ein DELETE auf Kunde " + kundeID
     });
 })
 

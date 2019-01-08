@@ -1,21 +1,32 @@
 const express = require('express');
 const app = express();
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+const fs = require('fs');
+
+
 
 const kundeRoutes = require('./api/resources/kunde');
 const einkaufslisteRoutes = require('./api/resources/einkaufsliste');
-const discounterRoutes = require('./api/resources/discounter');
-const produktRoutes = require('./api/resources/produkt');
 
 app.use(bodyParser.json())
 
-
-
 // Anfragen mit bestimmten URIs werden in die jeweiligen Skripte weitergeleitet
 app.use('/kunde', kundeRoutes);
-app.use('/einkaufsliste', einkaufslisteRoutes);
-app.use('/discounter', discounterRoutes);
-app.use('/produkt', produktRoutes);
+
+app.use('/kunde/:kundeID/einkaufsliste', (req, res, next) => {
+    
+    // Um in einkaufsliste.js auf die kundeID zugreifen zu können, speichern wir die kundeID in einem JSON-File
+    const kundeID = {
+        kundeID : req.params.kundeID
+    };
+    
+    fs.writeFile('./api/resources/currentUrlInformations.json', JSON.stringify(kundeID), function(error){
+        if(error) throw error;
+        next();
+    })
+});
+
+app.use('/kunde/:kundeID/einkaufsliste', einkaufslisteRoutes);
 
 
 
@@ -36,5 +47,7 @@ app.use((error, req, res, next) => {
         }
     })
 })
+
+
 
 module.exports = app;
