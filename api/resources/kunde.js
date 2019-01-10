@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const einkaufslisteRoutes = require('./einkaufsliste');
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
@@ -26,13 +25,10 @@ router.post("/", (req, res, next) => {
     kundenListe.push(kunde);
 
     // Das Array wird in der lokalen Datenbank (einem json-File) gespeichert
-    fs.writeFile('kundenDatenbank.json', JSON.stringify(kundenListe), function(error){
-        if(error) throw error;
-    });
+    saveData();
 
     // 201 = CREATED
     res.status(201).json({
-        uri : "localhost:3001/kunde/" + kunde.id,
         createdKunde: kunde
     });
 })
@@ -42,7 +38,7 @@ router.post("/", (req, res, next) => {
 router.get("/", (req, res, next) => {
 
     res.status(200).json({
-        Kunden : kundenListe
+        KundenListe : kundenListe
     });
 })
 
@@ -80,10 +76,30 @@ router.delete("/:kundeID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
+    for(let i = 0; i < kundenListe.length; i++){
+
+        if(kundenListe[i].id == kundeID){
+            kundenListe.splice(i, 1);
+            saveData();
+        }
+    }
+
     res.status(200).json({
-        message: "Ein DELETE auf Kunde " + kundeID
+        newKundenListe: kundenListe
     });
 })
+
+
+
+// HILFS FUNKTIONEN
+
+
+
+const saveData = function(){
+    fs.writeFile('kundenDatenbank.json', JSON.stringify(kundenListe), function(error){
+        if(error) throw error;
+    });
+}
 
 
 

@@ -9,7 +9,7 @@ const kundenListe = require('../../kundenDatenbank');
 
 router.get("/:einkaufslisteID/", (req, res, next) => {
 
-    fs.readFile('./api/resources/currentUrlInformations.json', 'utf8',  (error, data) => {
+    fs.readFile('./api/resources/kundeID.json', 'utf8',  (error, data) => {
         
         if(error) throw error;
 
@@ -46,6 +46,131 @@ router.get("/:einkaufslisteID/", (req, res, next) => {
         // });
     })
 })
+
+
+
+router.get("/", (req, res, next) => {
+
+    fs.readFile('./api/resources/kundeID.json', 'utf8',  (error, data) => {
+        
+        if(error) throw error;
+
+        // Es wird auf die kundeID aus app.js zugegriffen
+        const current = JSON.parse(data);
+        kundeID = current.kundeID;
+
+        // Der Kunde mit der jeweiligen Kunden ID wird gesucht
+        for(let i = 0; i < kundenListe.length; i++){
+
+            if(kundenListe[i].id == kundeID){
+
+                        res.status(200).json({
+                            einkaufslisten: kundenListe[i].einkaufslisten,
+                        })
+                    }
+                }
+        // Die Einkaufsliste auf den Kunden mit der übergebenen ID wurde nicht gefunden
+        // 404 = Not Found
+        // res.sendStatus(404);
+        // res.status(404).json({
+        //     message: "404 Not Found"
+        // });
+    })
+})
+
+
+
+router.post("/", (req, res, next) => {
+
+    fs.readFile('./api/resources/kundeID.json', (error, data) => {
+
+        if(error) throw error;
+
+        // Es wird auf die kundeID aus app.js zugegriffen
+        const current = JSON.parse(data);
+        kundeID = current.kundeID;
+
+        for(let i = 0; i < kundenListe.length; i++){
+
+            if(kundenListe[i].id == kundeID){
+
+                const newEinkaufsliste = {
+                    id : kundenListe[i].einkaufslisten.length + 1,
+                    produkte : req.body.produkte
+                }
+                
+                kundenListe[i].einkaufslisten.push(newEinkaufsliste);
+
+                saveData();
+
+                res.status(200).json({
+                    kunde : kundenListe[i]
+                })
+            }
+        }
+
+    })
+
+})
+
+
+
+router.delete('/:einkaufslisteID', (req, res, next) => {
+
+    fs.readFile('./api/resources/kundeID.json', (error, data) => {
+
+        if(error) throw error;
+
+        // Es wird auf die kundeID aus app.js zugegriffen
+        const current = JSON.parse(data);
+        kundeID = current.kundeID;
+
+        const einkaufslisteID = req.params.einkaufslisteID;
+        console.log(einkaufslisteID);
+
+        for(let i = 0; i < kundenListe.length; i++){
+
+            if(kundenListe[i].id == kundeID){
+
+                kundenListe[i].einkaufslisten.splice(einkaufslisteID - 1, 1);
+                // Jede Einkaufsliste soll immer folgende ID haben:
+                // Position im Array + 1
+                refreshIDs(kundeID);
+                saveData();
+
+                res.status(200).json({
+                    kunde : kundenListe[i]
+                })
+            }
+        }
+    })
+});
+
+
+// HILFS FUNKTIONEN
+
+
+const saveData = function(){
+    fs.writeFile('kundenDatenbank.json', JSON.stringify(kundenListe), function(error){
+        if(error) throw error;
+    });
+}
+
+
+
+const refreshIDs = function(kundeID){
+
+    for(let i = 0; i < kundenListe.length; i++){
+
+        if(kundenListe[i].id == kundeID){
+
+            for(let j = 0; j < kundenListe[i].einkaufslisten.length; j++){
+
+                kundenListe[i].einkaufslisten[j].id = j + 1;
+            }
+        }
+    }
+}
 
 
 
@@ -125,34 +250,7 @@ router.delete("/:einkaufslisteID", (req, res, next) => {
 
     });
 })
-
-
-
-const generateNewID = function(){
-
-    // Dieser token soll auf true gesetzt werden, wenn die ID des aktuellen Kunden mit dem Zähler übereinstmmt
-    // So soll eine ID gefunden werden, die noch nicht verwendet wird
-
-    var token = false;
-
-    for(let i = 0; i < einkaufslisten.length + 1; i++) {
-
-        for(let position = 0; position < einkaufslisten.length; position++){
-
-            // Wird die aktuelle ID schon verwendet, so wird der token auf true gesetzt
-            if(einkaufslisten[position].id == i){
-                token = true;
-            }
-
-        }
-        // Ist der token = false, so wird der aktuelle Zähler zurückgegeben
-        if(!token){
-            return i;
-        }
-        // Der token wird wieder auf false gesetzt, um alles nocheinmal mit dem nächsten Zähler machen zu können
-        token = false;
-    }
-}
 */
+
 
 module.exports = router;

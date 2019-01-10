@@ -1,1 +1,1 @@
-[{"id":0,"name":"Simon","einkaufslisten":[{"id": 4, "Produkt1" : "Käse", "Produkt2": "Milch"}]}]
+[{"id":0,"name":"Simon","einkaufslisten":[{"id":1,"produkte":["Döner","Kebab","Quark","Lol"]},{"id":2,"produkte":["Döner"]}]},{"id":1,"name":"Hendrik","einkaufslisten":[{"id":1,"produkte":["Milch","Milch","mehr Milch","NOCH MEHR MILCH!!!"]}]},{"id":2,"name":"Dennis","einkaufslisten":[]}]
