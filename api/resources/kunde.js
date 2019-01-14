@@ -6,6 +6,8 @@ const fs = require('fs');
 const kundenListe = require('../../kundenDatenbank');
 
 
+const ourUri = "localhost:3000";
+
 
 console.log(kundenListe);
 // console.log(kundenListe.length);
@@ -14,9 +16,12 @@ console.log(kundenListe);
 
 router.post("/", (req, res, next) => {
 
+    const newId = generateNewID();
+
     // Ein neuer Kunde wird erstellt
     const kunde = {
-        id: generateNewID(),
+        uri: ourUri + "/kunde/" + newId,
+        id: newId,
         name: req.body.name,
         einkaufslisten: []
     }
@@ -49,9 +54,11 @@ router.get("/:kundeID", (req, res, next) => {
     
     const id = req.params.kundeID;
 
+    console.log(ourUri + req.originalUrl);
+
     // Der Kunde mit der übergebenen Kunden ID wird gesucht und in der Variable currentKunde gespeichert
     for(let i = 0; i < kundenListe.length; i++){
-        if(kundenListe[i].id == id){
+        if(kundenListe[i].uri == ourUri + req.originalUrl || ourUri + req.originalUrl + "/"){
             var currentKunde = kundenListe[i];
         }
     }
@@ -110,7 +117,7 @@ const generateNewID = function(){
 
     var token = false;
 
-    for(let i = 0; i < kundenListe.length + 1; i++) {
+    for(let i = 1; i < kundenListe.length + 2; i++) {
 
         for(let position = 0; position < kundenListe.length; position++){
 

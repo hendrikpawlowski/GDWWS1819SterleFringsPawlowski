@@ -9,6 +9,9 @@ const kundeRoutes = require('./api/resources/kunde');
 const einkaufslisteRoutes = require('./api/resources/einkaufsliste');
 
 
+const ourUri = "localhost:3000";
+
+
 
 app.use(bodyParser.json())
 
@@ -17,12 +20,12 @@ app.use('/kunde', kundeRoutes);
 
 app.use('/kunde/:kundeID/einkaufsliste', (req, res, next) => {
     
-    // Um in einkaufsliste.js auf die kundeID zugreifen zu können, speichern wir die kundeID in einem JSON-File
-    const kundeID = {
-        kundeID : req.params.kundeID
+    // Um in einkaufsliste.js auf die kundURI zugreifen zu können, speichern wir die kundeURI in einem JSON-File
+    const kundeURI = {
+        kundeURI : ourUri + "/kunde/" + req.params.kundeID
     };
     
-    fs.writeFile('./api/resources/kundeID.json', JSON.stringify(kundeID), function(error){
+    fs.writeFile('./api/resources/kundeURI.json', JSON.stringify(kundeURI), function(error){
         if(error) throw error;
         next();
     })
