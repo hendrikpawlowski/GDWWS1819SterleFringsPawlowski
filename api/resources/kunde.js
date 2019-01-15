@@ -4,13 +4,9 @@ const fs = require('fs');
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
-
+console.log(kundenListe);
 
 const ourUri = "localhost:3000";
-
-
-console.log(kundenListe);
-// console.log(kundenListe.length);
 
 
 
@@ -58,7 +54,8 @@ router.get("/:kundeID", (req, res, next) => {
 
     // Der Kunde mit der übergebenen Kunden ID wird gesucht und in der Variable currentKunde gespeichert
     for(let i = 0; i < kundenListe.length; i++){
-        if(kundenListe[i].uri == ourUri + req.originalUrl || ourUri + req.originalUrl + "/"){
+        
+        if(kundenListe[i].uri == ourUri + req.originalUrl){
             var currentKunde = kundenListe[i];
         }
     }

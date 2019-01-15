@@ -5,11 +5,15 @@ const fs = require('fs');
 // Die lokale Einkaufslistendatenbank wird in einem Array in der Variable einkaufslisten gespeichert
 const kundenListe = require('../../kundenDatenbank');
 
-
 const ourUri = "localhost:3000";
 
 
+
 router.get("/:einkaufslisteID/", (req, res, next) => {
+
+    console.log("url:" + req.url);
+    console.log("baseUrl: " + req.baseUrl);
+    console.log("originalUrl: " + req.originalUrl);
 
     fs.readFile('./api/resources/kundeURI.json', 'utf8',  (error, data) => {
         
@@ -21,8 +25,10 @@ router.get("/:einkaufslisteID/", (req, res, next) => {
 
         // Auf die einkaufslisteID wird zugegriffen
         const einkaufslisteID = req.params.einkaufslisteID;
-        //const currentUri = ourUri + "/kunde/" + kundeID + "/einkaufsliste/" + einkaufslisteID
 
+        // Diese Variable wird auf true gesetzt, wenn der Kunde und seine Einkaufsliste gefunden wurden
+        var found = false;
+        
         // Der Kunde mit der jeweiligen Kunden ID wird gesucht
         for(let i = 0; i < kundenListe.length; i++){
 
@@ -33,20 +39,21 @@ router.get("/:einkaufslisteID/", (req, res, next) => {
                     if(kundenListe[i].einkaufslisten[j].uri == kundeURI + "/einkaufsliste/" + einkaufslisteID){
 
                         res.status(200).json({
-
-                            kunde: kundenListe[i],
                             einkaufsliste: kundenListe[i].einkaufslisten[j]
                         })
+
+                        found = true;
                     }
                 }
             }
         }
-        // Die Einkaufsliste auf den Kunden mit der übergebenen ID wurde nicht gefunden
-        // 404 = Not Found
-        // res.sendStatus(404);
-        // res.status(404).json({
-        //     message: "404 Not Found"
-        // });
+
+        if(!found){
+            res.status(404).json({
+                message: "404 Not Found",
+                problem: "Der Kunde, oder die Einkaufsliste dieses Kunden existiert nicht"
+            })
+        }
     })
 })
 
@@ -58,26 +65,33 @@ router.get("/", (req, res, next) => {
         
         if(error) throw error;
 
-        // Es wird auf die kundeID aus app.js zugegriffen
+        // Es wird auf die kundeURI aus app.js zugegriffen
         const current = JSON.parse(data);
         const kundeURI = current.kundeURI;
 
-        // Der Kunde mit der jeweiligen Kunden ID wird gesucht
+        // Diese Variable wird auf true gesetzt, wenn der Kunde gefunden wurde
+        var found = false;
+
+        // Der Kunde mit der passenden URI wird gesucht
         for(let i = 0; i < kundenListe.length; i++){
 
             if(kundenListe[i].uri == kundeURI){
 
-                        res.status(200).json({
-                            einkaufslisten: kundenListe[i].einkaufslisten,
-                        })
-                    }
-                }
-        // Die Einkaufsliste auf den Kunden mit der übergebenen ID wurde nicht gefunden
+                res.status(200).json({
+                    einkaufslisten: kundenListe[i].einkaufslisten,
+                })
+
+                found = true;
+            }
+        }
+
+        if(!found){
+            res.status(404).json({
+                message: "404 Not Found",
+                problem: "Der gesuchte Kunde existiert nicht"
+            })
+        }
         // 404 = Not Found
-        // res.sendStatus(404);
-        // res.status(404).json({
-        //     message: "404 Not Found"
-        // });
     })
 })
 
@@ -112,9 +126,7 @@ router.post("/", (req, res, next) => {
                 })
             }
         }
-
     })
-
 })
 
 
@@ -132,6 +144,9 @@ router.delete('/:einkaufslisteID', (req, res, next) => {
         const einkaufslisteID = req.params.einkaufslisteID;
         console.log(einkaufslisteID);
 
+        // Diese Variable wird auf true gesetzt, wenn der Kunde und seine Einkaufsliste gefunden wurden
+        var found = false;
+
         for(let i = 0; i < kundenListe.length; i++){
 
             if(kundenListe[i].uri == kundeURI){
@@ -145,7 +160,15 @@ router.delete('/:einkaufslisteID', (req, res, next) => {
                 res.status(200).json({
                     kunde : kundenListe[i]
                 })
+
+                found = true;
             }
+        }
+        if(!true){
+            res.status(404).json({
+                message: "404 Not Found",
+                problem: "Der Kunde, oder die Einkaufsliste dieses Kunden existiert nicht"
+            })
         }
     })
 });
@@ -178,85 +201,6 @@ const refreshIDs = function(kundeURI){
     }
 }
 
-
-
-/*
-console.log(einkaufslisten);
-console.log(einkaufslisten.length);
-
-router.post("/", (req, res, next) => {
-
-    // Eine neue Einkaufsliste wird erstellt
-    const einkaufsliste = {
-        id: generateNewID(),
-        kundeID: req.body.kundeID
-    }
-
-
-    for(let i = 0; i < kundenListe.length; i++){
-
-        //Prüfung, ob eingegebene KundenID in der Kundendatenbank vorhanden ist
-        if(kundenListe[i].id == einkaufsliste.kundeID){
-
-            const currentKunde = kundenListe[i];
-            const currentKundeEinkaufslisten = currentKunde.einkaufslisten;
-
-            // Die Einkaufsliste wird dem Array hinzugefügt
-            einkaufslisten.push(einkaufsliste);
-
-            // Das Array wird in der lokalen Einkaufslistendatenbank (einem json-File) gespeichert
-            fs.writeFile('einkaufslistenDatenbank.json', JSON.stringify(einkaufslisten), function(error){
-                if(error) throw error;
-            });
-
-            // EinkaufslistenID wird dem zugehörigen Kunden in der Kundendatenbank (einem json-File) hinzugefügt
-            currentKunde.einkaufslisten.push(einkaufsliste.id);
-
-            fs.writeFile('kundenDatenbank.json', JSON.stringify(kundenListe), function(error){
-                if(error) throw error;
-            });
-
-
-            // 201 = CREATED
-            res.status(201).json({
-                uri: "localhost:3001/einkaufsliste/" + einkaufsliste.id,
-                createdEinkaufsliste: einkaufsliste
-            });
-        }
-    }
-})
-
-router.get("/:einkaufslisteID", (req, res, next) => {
-
-    const id = req.params.einkaufslisteID;
-
-    // Die Einkaufsliste mit der übergebenen Einkaufslisten ID wird gesucht und in der Variable currentEinkaufsliste gespeichert
-    for(let i = 0; i < einkaufslisten.length; i++){
-        if(einkaufslisten[i].id == id){
-            var currentEinkaufsliste = einkaufslisten[i];
-        }
-    }
-
-    res.status(200).json({
-        message: "Ein GET auf Einkaufsliste " + id,
-        einkaufsliste: currentEinkaufsliste
-    });
-})
-
-router.put("/:einkaufslisteID", (req, res, next) => {
-
-    res.status(200).json({
-
-    });
-})
-
-router.delete("/:einkaufslisteID", (req, res, next) => {
-
-    res.status(200).json({
-
-    });
-})
-*/
 
 
 module.exports = router;
