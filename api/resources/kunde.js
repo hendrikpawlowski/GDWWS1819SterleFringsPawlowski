@@ -10,6 +10,10 @@ const ourUri = "localhost:3000";
 
 
 
+/*
+ * POST Verb auf Kunde
+ * Ein neuer Kunde wird angelegt
+ */
 router.post("/", (req, res, next) => {
 
     const newId = generateNewID();
@@ -36,6 +40,10 @@ router.post("/", (req, res, next) => {
 
 
 
+/*
+ * GET Verb auf alle Kunden
+ * Die Kundenliste wird zurückgegeben
+ */
 router.get("/", (req, res, next) => {
 
     res.status(200).json({
@@ -46,6 +54,10 @@ router.get("/", (req, res, next) => {
 
 
 
+/*
+ * GET Verb auf einen speziellen Kunden
+ * Der Kunde, mit dem die URI übereinstimmt wird zurückgegeben
+ */
 router.get("/:kundeID", (req, res, next) => {
     
     const id = req.params.kundeID;
@@ -67,6 +79,10 @@ router.get("/:kundeID", (req, res, next) => {
 
 
 
+/*
+ * PUT Verb auf einen speziellen Kunden
+ * Der Kunde, mit dem die URI übereinstimmt, wird mit neuen Daten gespeichert
+ */
 router.put("/:kundeID", (req, res, next) => {
 
     res.status(200).json({
@@ -76,6 +92,10 @@ router.put("/:kundeID", (req, res, next) => {
 
 
 
+/*
+ * DELETE Verb auf einen speziellen Kunden
+ * Der Kunde, mit dem die URI übereinstimmt, wird gelöscht
+ */
 router.delete("/:kundeID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
@@ -97,8 +117,10 @@ router.delete("/:kundeID", (req, res, next) => {
 
 // HILFS FUNKTIONEN
 
-
-
+/*
+ * saveData ist dazu da, um Daten die in unserer lokalen Datenbank in Benutzung unserer Anwendung geändert
+ * wurden wieder zu speichern.
+ */
 const saveData = function(){
     fs.writeFile('kundenDatenbank.json', JSON.stringify(kundenListe), function(error){
         if(error) throw error;
@@ -107,6 +129,14 @@ const saveData = function(){
 
 
 
+/*
+ * Mit generateNewID soll jedem Kunden automatisch eine ID zugeteilt werden
+ * Falls im Laufe der Zeit ID wieder frei werden, sollen jene mithilfe dieser Funktion
+ * ausfindig gemacht werden
+ * Bsp: Es existieren folgende Kunden: 1, 2, 3, 4
+ * Im Laufe der Zeit wird der Kunde mit der ID 2 gelöscht
+ * Wird nun ein neuer Kunde erstellt, so bekommt er die ID = 2
+ */
 const generateNewID = function(){
 
     // Dieser token soll auf true gesetzt werden, wenn die ID des aktuellen Kunden mit dem Zähler übereinstmmt
