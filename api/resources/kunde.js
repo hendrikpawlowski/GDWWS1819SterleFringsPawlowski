@@ -65,17 +65,16 @@ router.get("/:kundeID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
-    // Der Kunde mit der übergebenen URI wird gesucht und in der Variable currentKunde gespeichert
-    for (let i = 0; i < kundenListe.length; i++) {
-
-        if (kundenListe[i].id == kundeID) {
-            var currentKunde = kundenListe[i];
-        }
+    if (!findKundeByID(kundeID)) {
+        res.status(404).json({
+            message: "404 Not Found",
+            problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
+        })
+    } else {
+        res.status(200).json({
+            kunde: findKundeByID(kundeID)
+        })
     }
-
-    res.status(200).json({
-        kunde: currentKunde
-    })
 })
 
 
@@ -88,26 +87,20 @@ router.put("/:kundeID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
-    var found = false;
+    if (!findKundeByID(kundeID)) {
 
-    for (let i = 0; i < kundenListe.length; i++) {
-
-        if (kundenListe[i].id == kundeID) {
-
-            kundenListe[i].name = req.body.name;
-
-            res.status(200).json({
-                changedKunde: kundenListe[i]
-            });
-
-            saveData();
-            found = true;
-        }
-    }
-    if (!found) {
         res.status(404).json({
-            message: "404 Not Found",
-            problem: "Es existiert kein Kunde mit der ID: " + kundeID
+            message: "404Not Found",
+            problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
+        })
+
+    } else {
+
+        findKundeByID(kundeID).name = req.body.name;
+        saveData();
+
+        res.status(200).json({
+            changedKunde: findKundeByID(kundeID)
         })
     }
 })
@@ -146,31 +139,18 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
 
-    // Diese Variable wird auf true gesetzt, wenn der Kunde und seine Einkaufsliste gefunden wurden
-    var found = false;
+    if (!findEinkaufslisteByID(kundeID, einkaufslisteID)) {
 
-    // Der Kunde mit der jeweiligen Kunden ID wird gesucht
-    for (let i = 0; i < kundenListe.length; i++) {
-
-        if (kundenListe[i].id == kundeID) {
-
-            for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++)
-
-                if (kundenListe[i].einkaufslisten[j].id == einkaufslisteID) {
-                    
-                    res.status(200).json({
-                        einkaufsliste: kundenListe[i].einkaufslisten[j]
-                    })
-                    found = true;
-                }
-        }
-    }
-
-    if (!found) {
         res.status(404).json({
             message: "404 Not Found",
-            problem: "Der Kunde, oder die Einkaufsliste dieses Kunden existiert nicht"
+            problem: "Der Kunde oder die Einkaufsliste existiert nicht"
         })
+    } else {
+
+        res.status(200).json({
+            einkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
+        })
+
     }
 })
 
@@ -182,26 +162,19 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
  */
 router.get("/:kundeID/einkaufsliste", (req, res, next) => {
 
-    // Diese Variable wird auf true gesetzt, wenn der Kunde gefunden wurde
-    var found = false;
+    const kundeID = req.params.kundeID;
 
-    // Der Kunde mit der passenden URI wird gesucht
-    for (let i = 0; i < kundenListe.length; i++) {
+    if (!findKundeByID(kundeID)) {
 
-        if (kundenListe[i].uri + "/einkaufsliste" == ourUri + req.originalUrl) {
-
-            res.status(200).json({
-                einkaufslisten: kundenListe[i].einkaufslisten,
-            })
-
-            found = true;
-        }
-    }
-
-    if (!found) {
         res.status(404).json({
             message: "404 Not Found",
-            problem: "Der gesuchte Kunde existiert nicht"
+            problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
+        })
+
+    } else {
+
+        res.status(200).json({
+            einkaufslisten: findKundeByID(kundeID).einkaufslisten
         })
     }
 })
@@ -216,26 +189,30 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
-    for (let i = 0; i < kundenListe.length; i++) {
+    if (!findKundeByID(kundeID)) {
 
-        if (kundenListe[i].id == kundeID) {
+        res.status(404).json({
+            message: "404 Not Found",
+            problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
+        })
 
-            const newId = generateNewID(kundenListe[i].einkaufslisten);
+    } else {
 
-            const newEinkaufsliste = {
-                uri: ourUri + req.originalUrl + "/" + newId,
-                id: newId,
-                produkte: req.body.produkte
-            }
+        const currentKunde = findKundeByID(kundeID);
+        const newId = generateNewID(currentKunde.einkaufslisten);
 
-            kundenListe[i].einkaufslisten.push(newEinkaufsliste);
-
-            saveData();
-
-            res.status(200).json({
-                kunde: kundenListe[i]
-            })
+        const newEinkaufsliste = {
+            uri: ourUri + req.originalUrl + "/" + newId,
+            id: newId,
+            produkte: req.body.produkte
         }
+
+        currentKunde.einkaufslisten.push(newEinkaufsliste);
+        saveData();
+
+        res.status(200).json({
+            kunde: currentKunde
+        })
     }
 })
 
@@ -250,36 +227,54 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
 
-    // Diese Variable wird auf true gesetzt, wenn der Kunde und seine Einkaufsliste gefunden wurden
-    var found = false;
+    if (!findEinkaufslisteByID(kundeID, einkaufslisteID)) {
 
-    for (let i = 0; i < kundenListe.length; i++) {
+        res.status(404).json({
+            message: "404 Not Found",
+            problem: "Der Kunde oder die Einkaufsliste existiert nicht"
+        })
 
-        if (kundenListe[i].id == kundeID) {
+    } else {
 
-            for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++) {
+        const currentKunde = findKundeByID(kundeID);
 
-                if (kundenListe[i].einkaufslisten[j].id == einkaufslisteID) {
+        for (let i = 0; i < currentKunde.einkaufslisten.length; i++) {
 
-                    kundenListe[i].einkaufslisten.splice(j, 1);
-                    // Jede Einkaufsliste soll immer folgende ID haben:
-                    // Position im Array + 1
-                    // refreshIDs(i);
-                    saveData();
+            if (currentKunde.einkaufslisten[i].id == einkaufslisteID) {
 
-                    res.status(200).json({
-                        kunde: kundenListe[i]
-                    })
+                currentKunde.einkaufslisten.splice(i, 1);
+                saveData();
 
-                    found = true;
-                }
+                res.status(200).json({
+                    einkaufslisten: currentKunde.einkaufslisten
+                })
             }
         }
     }
-    if (!true) {
+})
+
+
+
+router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
+
+    const kundeID = req.params.kundeID;
+    const einkaufslisteID = req.params.einkaufslisteID;
+
+    const kundeUndEinkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
+
+    if (!kundeUndEinkaufsliste) {
         res.status(404).json({
             message: "404 Not Found",
-            problem: "Der Kunde, oder die Einkaufsliste dieses Kunden existiert nicht"
+            problem: "Der Kunde oder die Einkaufsliste existiert nicht"
+        })
+    } else {
+
+        kundeUndEinkaufsliste.produkte = req.body.produkte;
+
+        saveData();
+
+        res.status(200).json({
+            changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
         })
     }
 })
@@ -288,8 +283,10 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
 // HILFS FUNKTIONEN
 
+
+
 /*
- * saveData ist dazu da, um Daten die in unserer lokalen Datenbank in Benutzung unserer Anwendung geändert
+ * saveData ist dazu da, um Daten, die in unserer lokalen Datenbank, in Benutzung unserer Anwendung, geändert
  * wurden wieder zu speichern.
  */
 const saveData = function () {
@@ -301,8 +298,8 @@ const saveData = function () {
 
 
 /*
- * Mit generateNewID soll jedem Kunden automatisch eine ID zugeteilt werden
- * Falls im Laufe der Zeit ID wieder frei werden, sollen jene mithilfe dieser Funktion
+ * Mit generateNewID soll jedem Element in einem Array automatisch eine ID zugeteilt werden
+ * Falls im Laufe der Zeit IDs wieder frei werden, sollen jene mithilfe dieser Funktion
  * ausfindig gemacht werden
  * Bsp: Es existieren folgende Kunden: 1, 2, 3, 4
  * Im Laufe der Zeit wird der Kunde mit der ID 2 gelöscht
@@ -336,7 +333,9 @@ const generateNewID = function (array) {
 
 
 
-
+/*
+ * sortKundenListe ist dazu da die komplette KundenListe nach IDs zu sortieren
+ */
 const sortKundenListe = function () {
 
     kundenListe.sort(function (a, b) {
@@ -353,24 +352,36 @@ const sortKundenListe = function () {
 
 
 
-/*
- * refreshIDs ist dazu da, um jeder Einkaufsliste des Kunden immer genau die ID zu übergeben,
- * die mit der Position im Einkaufsliste-Array des Kunden übereinstimmen
- * Bsp: Es existiert ein Kunde mit Liste1 und Liste2
- * Nun wird Liste1 gelöscht und dieser Kunde hat nur noch Liste2
- * Mit der refreshIDs-Methode wird nun aus dieser Liste2 die neue Liste1
- */
-// const refreshIDs = function (i) {
+const findKundeByID = function (id) {
 
-//     for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++) {
+    for (let i = 0; i < kundenListe.length; i++) {
 
-//         const newID = j + 1;
-//         kundenListe[i].einkaufslisten[j].id = newID;
-//         kundenListe[i].einkaufslisten[j].uri = kundenListe[i].uri + "/einkaufsliste/" + newID;
-//     }
-// }
+        if (kundenListe[i].id == id) {
+
+            return kundenListe[i];
+        }
+    }
+
+    return false;
+}
 
 
+
+const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
+
+    const currentKunde = findKundeByID(kundeID);
+    console.log("currentKunde: " + currentKunde);
+
+    for (let i = 0; i < currentKunde.einkaufslisten.length; i++) {
+
+        if (currentKunde.einkaufslisten[i].id == einkaufslisteID) {
+
+            return currentKunde.einkaufslisten[i];
+        }
+    }
+
+    return false;
+}
 
 
 

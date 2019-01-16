@@ -9,9 +9,6 @@ const kundeRoutes = require('./api/resources/kunde');
 const einkaufslisteRoutes = require('./api/resources/einkaufsliste');
 
 
-const ourUri = "localhost:3000";
-
-
 
 app.use(bodyParser.json())
 
