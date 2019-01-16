@@ -3,12 +3,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const fs = require('fs');
 
-
-
 const kundeRoutes = require('./api/resources/kunde');
 const einkaufslisteRoutes = require('./api/resources/einkaufsliste');
-
-
 
 app.use(bodyParser.json())
 
@@ -30,8 +26,6 @@ app.use('/kunde', kundeRoutes);
 
 // app.use('/kunde/:kundeID/einkaufsliste', einkaufslisteRoutes);
 
-
-
 // ERROR Handling
 app.use((req, res, next) => {
     // 404 = Not Found
@@ -49,7 +43,6 @@ app.use((error, req, res, next) => {
         }
     })
 })
-
 
 /*
 var request = require("request")
