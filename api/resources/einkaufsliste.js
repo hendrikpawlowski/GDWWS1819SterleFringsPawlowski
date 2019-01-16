@@ -26,18 +26,10 @@ router.get("/:einkaufslisteID/", (req, res, next) => {
 
         if (kundenListe[i].uri + "/einkaufsliste/" + einkaufslisteID == ourUri + req.originalUrl) {
 
-            for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++) {
-
-                 if (kundenListe[i].einkaufslisten[j].uri == ourUri + req.originalUrl) {
-
-                // console.log(kundenListe[i].einkaufslisten[einkaufslisteID]);
-                    res.status(200).json({
-                        einkaufsliste: kundenListe[i].einkaufslisten[einkaufslisteID]
-                    })
-
-                    found = true;
-                }
-            }
+            res.status(200).json({
+                einkaufsliste: kundenListe[i].einkaufslisten[einkaufslisteID - 1]
+            })
+            found = true;
         }
     }
 
@@ -130,17 +122,23 @@ router.delete('/:einkaufslisteID', (req, res, next) => {
 
         if (kundenListe[i].uri + "/einkaufsliste/" + einkaufslisteID == ourUri + req.originalUrl) {
 
-            kundenListe[i].einkaufslisten.splice(einkaufslisteID - 1, 1);
-            // Jede Einkaufsliste soll immer folgende ID haben:
-            // Position im Array + 1
-            refreshIDs(i);
-            saveData();
+            for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++) {
 
-            res.status(200).json({
-                kunde: kundenListe[i]
-            })
+                if (kundenListe[i].einkaufslisten[j].id == einkaufslisteID) {
 
-            found = true;
+                    kundenListe[i].einkaufslisten.splice(j, 1);
+                    // Jede Einkaufsliste soll immer folgende ID haben:
+                    // Position im Array + 1
+                    // refreshIDs(i);
+                    saveData();
+
+                    res.status(200).json({
+                        kunde: kundenListe[i]
+                    })
+
+                    found = true;
+                }
+            }
         }
     }
     if (!true) {
@@ -176,15 +174,15 @@ const saveData = function () {
  * Nun wird Liste1 gelöscht und dieser Kunde hat nur noch Liste2
  * Mit der refreshIDs-Methode wird nun aus dieser Liste2 die neue Liste1
  */
-const refreshIDs = function (i) {
+// const refreshIDs = function (i) {
 
-    for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++) {
+//     for (let j = 0; j < kundenListe[i].einkaufslisten.length; j++) {
 
-        const newID = j + 1;
-        kundenListe[i].einkaufslisten[j].id = newID;
-        kundenListe[i].einkaufslisten[j].uri = kundenListe[i].uri + "/einkaufsliste/" + newID;
-    }
-}
+//         const newID = j + 1;
+//         kundenListe[i].einkaufslisten[j].id = newID;
+//         kundenListe[i].einkaufslisten[j].uri = kundenListe[i].uri + "/einkaufsliste/" + newID;
+//     }
+// }
 
 
 

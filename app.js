@@ -20,18 +20,18 @@ app.use('/kunde', kundeRoutes);
 
 // app.use('/kunde/:kundeID/einkaufsliste', (req, res, next) => {
 
-//     // Um in einkaufsliste.js auf die kundURI zugreifen zu können, speichern wir die kundeURI in einem JSON-File
-//     const kundeURI = {
-//         kundeURI : ourUri + "/kunde/" + req.params.kundeID
+//      // Um in einkaufsliste.js auf die kundURI zugreifen zu können, speichern wir die kundeURI in einem JSON-File
+//      const kundeURI = {
+//          kundeURI : ourUri + "/kunde/" + req.params.kundeID
 //     };
 
-//     fs.writeFile('./api/resources/kundeURI.json', JSON.stringify(kundeURI), function(error){
-//         if(error) throw error;
-//         next();
-//     })
-// });
+//      fs.writeFile('./api/resources/kundeURI.json', JSON.stringify(kundeURI), function(error){
+//          if(error) throw error;
+//          next();
+//      })
+//  });
 
-app.use('/kunde/:kundeID/einkaufsliste', einkaufslisteRoutes);
+// app.use('/kunde/:kundeID/einkaufsliste', einkaufslisteRoutes);
 
 
 
