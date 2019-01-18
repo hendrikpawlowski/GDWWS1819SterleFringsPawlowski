@@ -17,28 +17,35 @@ const ourUri = "localhost:3000";
  */
 router.post("/", (req, res, next) => {
 
-    const newId = generateNewID(kundenListe);
+    // if (req.body == "" + {}) {
+    //     res.status(200).json({
+    //         message: "Missing body"
+    //     })
+    // } else {
 
-    // Ein neuer Kunde wird erstellt
-    const kunde = {
-        uri: ourUri + "/kunde/" + newId,
-        id: newId,
-        name: req.body.name,
-        einkaufslisten: []
-    }
+        const newId = generateNewID(kundenListe);
 
-    // Der Kunde wird dem Array hinzugefügt
-    kundenListe.push(kunde);
+        // Ein neuer Kunde wird erstellt
+        const kunde = {
+            uri: ourUri + "/kunde/" + newId,
+            id: newId,
+            name: req.body.name,
+            einkaufslisten: []
+        }
 
-    // Die KundenListe wird sortiert
-    sortKundenListe();
-    // Die Änderungen werden in der lokalen Datenbank gespeichert
-    saveData();
+        // Der Kunde wird dem Array hinzugefügt
+        kundenListe.push(kunde);
 
-    // 201 = CREATED
-    res.status(201).json({
-        createdKunde: kunde
-    });
+        // Die KundenListe wird sortiert
+        sortKundenListe();
+        // Die Änderungen werden in der lokalen Datenbank gespeichert
+        saveData();
+
+        // 201 = CREATED
+        res.status(201).json({
+            createdKunde: kunde
+        });
+    // }
 })
 
 
@@ -270,7 +277,6 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     } else {
 
         kundeUndEinkaufsliste.produkte = req.body.produkte;
-
         saveData();
 
         res.status(200).json({
@@ -370,7 +376,6 @@ const findKundeByID = function (id) {
 const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 
     const currentKunde = findKundeByID(kundeID);
-    console.log("currentKunde: " + currentKunde);
 
     for (let i = 0; i < currentKunde.einkaufslisten.length; i++) {
 

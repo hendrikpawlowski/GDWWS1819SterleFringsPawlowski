@@ -11,24 +11,6 @@ app.use(bodyParser.json())
 // Anfragen mit bestimmten URIs werden in die jeweiligen Skripte weitergeleitet
 app.use('/kunde', kundeRoutes);
 
-<<<<<<< HEAD
-
-=======
-// app.use('/kunde/:kundeID/einkaufsliste', (req, res, next) => {
-
-//      // Um in einkaufsliste.js auf die kundURI zugreifen zu können, speichern wir die kundeURI in einem JSON-File
-//      const kundeURI = {
-//          kundeURI : ourUri + "/kunde/" + req.params.kundeID
-//     };
-
-//      fs.writeFile('./api/resources/kundeURI.json', JSON.stringify(kundeURI), function(error){
-//          if(error) throw error;
-//          next();
-//      })
-//  });
-
-// app.use('/kunde/:kundeID/einkaufsliste', einkaufslisteRoutes);
->>>>>>> 3f42eaff2e47321b274385120b541828265a53d8
 
 // ERROR Handling
 app.use((req, res, next) => {
@@ -48,24 +30,5 @@ app.use((error, req, res, next) => {
     })
 })
 
-<<<<<<< HEAD
-
-=======
-/*
-var request = require("request")
-
-var url = "localhost:3000/kunde/1";
-
-request({
-    url: url,
-    json: true
-}, function (error, response, body) {
-
-    if (!error && response.statusCode === 200) {
-        console.log(body) // Print the json response
-    }
-})
-*/
->>>>>>> 3f42eaff2e47321b274385120b541828265a53d8
 
 module.exports = app;
