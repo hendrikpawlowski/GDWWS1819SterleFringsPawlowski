@@ -17,35 +17,37 @@ const ourUri = "localhost:3000";
  */
 router.post("/", (req, res, next) => {
 
-    // if (req.body == "" + {}) {
-    //     res.status(200).json({
-    //         message: "Missing body"
-    //     })
-    // } else {
+    console.log(req.body);
+    console.log(req.body == {});
 
-        const newId = generateNewID(kundenListe);
-
-        // Ein neuer Kunde wird erstellt
-        const kunde = {
-            uri: ourUri + "/kunde/" + newId,
-            id: newId,
-            name: req.body.name,
-            einkaufslisten: []
-        }
-
-        // Der Kunde wird dem Array hinzugefügt
-        kundenListe.push(kunde);
-
-        // Die KundenListe wird sortiert
-        sortKundenListe();
-        // Die Änderungen werden in der lokalen Datenbank gespeichert
-        saveData();
-
-        // 201 = CREATED
-        res.status(201).json({
-            createdKunde: kunde
+    if (req.body.name == undefined) {
+        res.status(400).json({
+            message: "Missing body in this POST"
         });
-    // }
+        return;
+    }
+
+    const newId = generateNewID(kundenListe);
+
+    // Ein neuer Kunde wird erstellt
+    const kunde = {
+        uri: ourUri + "/kunde/" + newId,
+        id: newId,
+        name: req.body.name,
+        einkaufslisten: []
+    }
+
+    // Der Kunde wird dem Array hinzugefügt
+    kundenListe.push(kunde);
+
+    // Die KundenListe wird sortiert
+    sortKundenListe();
+    // Die Änderungen werden in der lokalen Datenbank gespeichert
+    saveData();
+
+    res.status(201).json({
+        createdKunde: kunde
+    });
 })
 
 
@@ -94,22 +96,27 @@ router.put("/:kundeID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
+    if (req.body.name == undefined) {
+        res.status(400).json({
+            message: "Missing body in this PUT"
+        });
+        return;
+    }
     if (!findKundeByID(kundeID)) {
 
         res.status(404).json({
             message: "404Not Found",
             problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
         })
-
-    } else {
-
-        findKundeByID(kundeID).name = req.body.name;
-        saveData();
-
-        res.status(200).json({
-            changedKunde: findKundeByID(kundeID)
-        })
+        return;
     }
+
+    findKundeByID(kundeID).name = req.body.name;
+    saveData();
+
+    res.status(200).json({
+        changedKunde: findKundeByID(kundeID)
+    })
 })
 
 
@@ -122,6 +129,14 @@ router.delete("/:kundeID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
+    if (!findKundeByID(kundeID)) {
+        res.status(404).json({
+            message: "404 Not Found",
+            problem: "Ein Kunde mit der ID " + kundeID + " existiert nicht"
+        })
+        return;
+    }
+
     for (let i = 0; i < kundenListe.length; i++) {
 
         if (kundenListe[i].id == kundeID) {
@@ -130,9 +145,10 @@ router.delete("/:kundeID", (req, res, next) => {
         }
     }
 
-    res.status(200).json({
-        newKundenListe: kundenListe
+    res.json({
+        neueKundenListe: kundenListe
     });
+    res.status(204);
 })
 
 
@@ -152,13 +168,13 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
             message: "404 Not Found",
             problem: "Der Kunde oder die Einkaufsliste existiert nicht"
         })
-    } else {
-
-        res.status(200).json({
-            einkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
-        })
-
+        return;
     }
+
+
+    res.status(200).json({
+        einkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
+    })
 })
 
 
@@ -196,31 +212,37 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
 
+    if (req.body.produkte == undefined) {
+
+        res.status(400).json({
+            message: "Missing body in this POST"
+        })
+        return;
+    }
     if (!findKundeByID(kundeID)) {
 
         res.status(404).json({
             message: "404 Not Found",
             problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
         })
-
-    } else {
-
-        const currentKunde = findKundeByID(kundeID);
-        const newId = generateNewID(currentKunde.einkaufslisten);
-
-        const newEinkaufsliste = {
-            uri: ourUri + req.originalUrl + "/" + newId,
-            id: newId,
-            produkte: req.body.produkte
-        }
-
-        currentKunde.einkaufslisten.push(newEinkaufsliste);
-        saveData();
-
-        res.status(200).json({
-            kunde: currentKunde
-        })
+        return;
     }
+
+    const currentKunde = findKundeByID(kundeID);
+    const newId = generateNewID(currentKunde.einkaufslisten);
+
+    const newEinkaufsliste = {
+        uri: ourUri + req.originalUrl + "/" + newId,
+        id: newId,
+        produkte: req.body.produkte
+    }
+
+    currentKunde.einkaufslisten.push(newEinkaufsliste);
+    saveData();
+
+    res.status(200).json({
+        kunde: currentKunde
+    })
 })
 
 
@@ -240,22 +262,22 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
             message: "404 Not Found",
             problem: "Der Kunde oder die Einkaufsliste existiert nicht"
         })
+        return;
+    }
 
-    } else {
+    const currentKunde = findKundeByID(kundeID);
 
-        const currentKunde = findKundeByID(kundeID);
+    for (let i = 0; i < currentKunde.einkaufslisten.length; i++) {
 
-        for (let i = 0; i < currentKunde.einkaufslisten.length; i++) {
+        if (currentKunde.einkaufslisten[i].id == einkaufslisteID) {
 
-            if (currentKunde.einkaufslisten[i].id == einkaufslisteID) {
+            currentKunde.einkaufslisten.splice(i, 1);
+            saveData();
 
-                currentKunde.einkaufslisten.splice(i, 1);
-                saveData();
-
-                res.status(200).json({
-                    einkaufslisten: currentKunde.einkaufslisten
-                })
-            }
+            res.json({
+                Kunde: findKundeByID(kundeID)
+            })
+            res.status(204);
         }
     }
 })
@@ -266,23 +288,29 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
-
     const kundeUndEinkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
+    if (req.body.produkte == undefined) {
+        res.status(400).json({
+            message: "Missing body in this PUT"
+        })
+        return;
+    }
     if (!kundeUndEinkaufsliste) {
+
         res.status(404).json({
             message: "404 Not Found",
             problem: "Der Kunde oder die Einkaufsliste existiert nicht"
         })
-    } else {
-
-        kundeUndEinkaufsliste.produkte = req.body.produkte;
-        saveData();
-
-        res.status(200).json({
-            changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
-        })
+        return;
     }
+
+    kundeUndEinkaufsliste.produkte = req.body.produkte;
+    saveData();
+
+    res.status(200).json({
+        changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
+    })
 })
 
 

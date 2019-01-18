@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const fs = require('fs');
 
 const kundeRoutes = require('./api/resources/kunde');
-const einkaufslisteRoutes = require('./api/resources/einkaufsliste');
 
 app.use(bodyParser.json())
 
