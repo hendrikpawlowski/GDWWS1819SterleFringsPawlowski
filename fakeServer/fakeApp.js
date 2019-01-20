@@ -1,5 +1,6 @@
 const express = require('express');
 const fakeapp = express();
+const bodyParser = require("body-parser");
 
 const discounterRoutes = require('./api/resources/discounter');
 

@@ -1,14 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const http = require('http');
+
+const options = {
+    host: "localhost",
+    port: 3069,
+    path: "/discounter",
+    method: "GET"
+};
+
+var DiscounterUri = "localhost:3069/discounter";
+
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
 
-console.log(kundenListe);
-
 const ourUri = "localhost:3000";
-
 
 
 /*
@@ -205,7 +213,7 @@ router.get("/:kundeID/einkaufsliste", (req, res, next) => {
 })
 
 
-
+var preis = 0;
 /*
  * POST Verb auf Einkaufsliste
  * Es wird eine neue Einkaufsliste für den Kunden mit der jeweiligen KundenID erstellt
@@ -234,10 +242,13 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     const currentKunde = findKundeByID(kundeID);
     const newId = generateNewID(currentKunde.einkaufslisten);
 
+    getDiscounterPreis(options, req.body.produkte);
+
+    console.log(preis)
     const newEinkaufsliste = {
         uri: ourUri + req.originalUrl + "/" + newId,
         id: newId,
-        produkte: req.body.produkte
+        produkte: req.body.produkte + " " + preis
     }
 
     currentKunde.einkaufslisten.push(newEinkaufsliste);
@@ -389,7 +400,7 @@ const sortKundenListe = function () {
 };
 
 
-
+//findet Kunden in der kundenListe, anhand der angegebenen ID
 const findKundeByID = function (id) {
 
     for (let i = 0; i < kundenListe.length; i++) {
@@ -404,7 +415,7 @@ const findKundeByID = function (id) {
 }
 
 
-
+//finden Einkaufsliste in der kundenListe, anhand der angegebenen kundenID und der angegebenen einkaufslistenID
 const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 
     const currentKunde = findKundeByID(kundeID);
@@ -420,6 +431,36 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
     return false;
 }
 
+//findet Produkt in einem Array, anhand des angegebenen Namens
+const findProduktByName = function (array, name) {
 
+    for (let i = 0; i < array.length; i++) {
+
+        if (array[i].name == name) {
+
+            return array[i];
+        }
+    }
+
+    return false;
+}
+
+/* GET Zugriff auf Server (Server wird anhand der options bestimmt)
+   Preis wird der Response, anhand des angegebenen Produktnamens entnommen
+ */
+function getDiscounterPreis(options, produktName) {
+        http.request(options, function (res) {
+        var body = "";
+
+        res.on("data", function (content) {
+            body += content;
+        });
+
+        res.on("end", function() {
+            const sortiment = JSON.parse(body);
+            preis = findProduktByName(sortiment['sortiment'], produktName).preis;
+        })
+    }).end();
+}
 
 module.exports = router;

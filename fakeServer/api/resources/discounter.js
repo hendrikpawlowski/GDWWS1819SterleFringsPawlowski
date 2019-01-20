@@ -9,7 +9,7 @@ const sortiment = require('../../sortiment');
 router.get("/",(req,res,next) => {
 
     res.status(200).json({
-        Sortiment: sortiment
+        sortiment
     });
 });
 
