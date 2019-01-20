@@ -1,9 +1,9 @@
 const http = require('http');
-const app = require('./fakeApp');
+const fakeapp = require('./fakeApp');
 
 const port = 3069;
 
-const server = http.createServer(app);
+const server = http.createServer(fakeapp);
 
 server.listen(port);
 

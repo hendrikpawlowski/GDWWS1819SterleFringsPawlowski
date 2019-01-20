@@ -1,11 +1,10 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
-const fs = require('fs');
 
 const kundeRoutes = require('./api/resources/kunde');
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // Anfragen mit bestimmten URIs werden in die jeweiligen Skripte weitergeleitet
 app.use('/kunde', kundeRoutes);
@@ -17,7 +16,7 @@ app.use((req, res, next) => {
     const error = new Error('404 Not Found');
     error.status = 404;
     next(error);
-})
+});
 
 app.use((error, req, res, next) => {
     // 500 = Internal Error
@@ -27,7 +26,7 @@ app.use((error, req, res, next) => {
             message: error.message
         }
     })
-})
+});
 
 
 module.exports = app;

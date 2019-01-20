@@ -22,7 +22,8 @@ router.post("/", (req, res, next) => {
 
     if (req.body.name == undefined) {
         res.status(400).json({
-            message: "Missing body in this POST"
+            message: "Missing body in this POST",
+            missing: "name"
         });
         return;
     }
@@ -98,7 +99,8 @@ router.put("/:kundeID", (req, res, next) => {
 
     if (req.body.name == undefined) {
         res.status(400).json({
-            message: "Missing body in this PUT"
+            message: "Missing body in this PUT",
+            missing: "name"
         });
         return;
     }
@@ -181,7 +183,7 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
 
 /*
  * GET Verb auf alle Einkaufslisten eines speziellen Kunden
- * Alle Einkaufsliste eines Kunden, mit welchem die KundenID übereinstimmt, soll ausgegeben werden
+ * Alle Einkaufslisten eines Kunden, mit welchem die KundenID übereinstimmt, soll ausgegeben werden
  */
 router.get("/:kundeID/einkaufsliste", (req, res, next) => {
 
@@ -215,7 +217,8 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     if (req.body.produkte == undefined) {
 
         res.status(400).json({
-            message: "Missing body in this POST"
+            message: "Missing body in this POST",
+            missing: "produkte"
         })
         return;
     }
@@ -292,7 +295,8 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     if (req.body.produkte == undefined) {
         res.status(400).json({
-            message: "Missing body in this PUT"
+            message: "Missing body in this PUT",
+            missing: "produkte"
         })
         return;
     }
