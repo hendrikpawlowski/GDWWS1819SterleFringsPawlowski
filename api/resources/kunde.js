@@ -261,6 +261,10 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
         res2.on("end", function () {
             
             const sortiment = JSON.parse(body);
+<<<<<<< HEAD
+=======
+            console.log(sortiment);
+>>>>>>> 5fabdb069d8040b9d742ae7712928bcbeb545471
             produkteArray = findProdukteByName(sortiment['Sortiment'], req.body.produkte);
 
             const newEinkaufsliste = {
@@ -366,6 +370,7 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
         return;
     }
 
+<<<<<<< HEAD
     currentKunde.einkaufslisten.splice(0, einkaufslisten.length);
     saveData();
 
@@ -373,6 +378,16 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
         Kunde: findKundeByID(kundeID)
     })
     res.status(204);
+=======
+            currentKunde.einkaufslisten.splice(0, einkaufslisten.length-1);
+            saveData();
+
+            res.json({
+                Kunde: findKundeByID(kundeID)
+            })
+            res.status(204);
+    
+>>>>>>> 5fabdb069d8040b9d742ae7712928bcbeb545471
 })
 
 
@@ -524,7 +539,8 @@ const findProdukteByName = function (discounterProdukte, kundeProdukte) {
                 const newProdukt = {
                     name: discounterProdukte[i].name,
                     marke: discounterProdukte[i].marke,
-                    preis: discounterProdukte[i].preis
+                    preis: discounterProdukte[i].preis,
+                    gewicht: discounterProdukte[i].gramm
                 }
                 produktListe.push(newProdukt);
                 gesamtPreis += discounterProdukte[i].preis
