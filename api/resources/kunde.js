@@ -261,10 +261,7 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
         res2.on("end", function () {
             
             const sortiment = JSON.parse(body);
-<<<<<<< HEAD
-=======
             console.log(sortiment);
->>>>>>> 5fabdb069d8040b9d742ae7712928bcbeb545471
             produkteArray = findProdukteByName(sortiment['Sortiment'], req.body.produkte);
 
             const newEinkaufsliste = {
@@ -370,16 +367,7 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
         return;
     }
 
-<<<<<<< HEAD
-    currentKunde.einkaufslisten.splice(0, einkaufslisten.length);
-    saveData();
-
-    res.json({
-        Kunde: findKundeByID(kundeID)
-    })
-    res.status(204);
-=======
-            currentKunde.einkaufslisten.splice(0, einkaufslisten.length-1);
+            currentKunde.einkaufslisten.splice(0, currentKunde.einkaufslisten.length);
             saveData();
 
             res.json({
@@ -387,7 +375,6 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
             })
             res.status(204);
     
->>>>>>> 5fabdb069d8040b9d742ae7712928bcbeb545471
 })
 
 
@@ -548,7 +535,7 @@ const findProdukteByName = function (discounterProdukte, kundeProdukte) {
     }
 
     var einkaufslisteBeiDiscounterLol = {
-        gesamtPreis: gesamtPreis,
+        gesamtPreis: gesamtPreis.toFixed(2),
         produktListe: produktListe
     };
     return einkaufslisteBeiDiscounterLol;
