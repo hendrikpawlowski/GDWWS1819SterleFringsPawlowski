@@ -374,7 +374,14 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
                 Kunde: findKundeByID(kundeID)
             })
             res.status(204);
+<<<<<<< HEAD
+=======
     
+<<<<<<< HEAD
+=======
+>>>>>>> 5fabdb069d8040b9d742ae7712928bcbeb545471
+>>>>>>> e8b7af2b1a6bf0c5a26b5a6d2d54d0910e6914bb
+>>>>>>> 83fad1425e6707121bba2f9b32345f7d399676bb
 })
 
 
