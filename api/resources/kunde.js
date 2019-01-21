@@ -319,7 +319,7 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
         return;
     }
 
-            currentKunde.einkaufslisten.splice(0, einkaufslisten.length);
+            currentKunde.einkaufslisten.splice(0, einkaufslisten.length-1);
             saveData();
 
             res.json({
