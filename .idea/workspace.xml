@@ -4,7 +4,6 @@
     <list default="true" id="b8d27ca1-9709-4764-bc7a-e66d81edd07f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/resources/kunde.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/resources/kunde.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fakeServer/sortiment.json" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/sortiment.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kundenDatenbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/kundenDatenbank.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -57,8 +56,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+            <state relative-caret-position="-373">
+              <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -67,7 +66,7 @@
         <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
-              <caret line="249" column="59" selection-start-line="249" selection-start-column="59" selection-end-line="249" selection-end-column="59" />
+              <caret line="321" column="75" selection-start-line="321" selection-start-column="75" selection-end-line="321" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -76,7 +75,7 @@
         <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="909" selection-start-column="909" selection-end-column="909" />
+              <caret column="261" selection-start-column="261" selection-end-column="261" />
             </state>
           </provider>
         </entry>
@@ -214,7 +213,7 @@
       <workItem from="1546891461497" duration="4580000" />
       <workItem from="1546896081615" duration="1754000" />
       <workItem from="1548003660801" duration="13915000" />
-      <workItem from="1548069228706" duration="7646000" />
+      <workItem from="1548069228706" duration="8458000" />
     </task>
     <task id="LOCAL-00001" summary="Einkaufsliste kann nun hinzugefügt werden und bestimmtem Kunden zugeordnet werden.&#10;Kunde besteht nun zusätzlich aus einem Array für die Einkaufslisten">
       <created>1546896856027</created>
@@ -244,14 +243,22 @@
       <option name="project" value="LOCAL" />
       <updated>1548075432304</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fehlerkorrektur">
+      <created>1548077190784</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1548077190784</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27895000" />
+    <option name="totallyTimeSpent" value="28707000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18968935" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -282,7 +289,8 @@
     <MESSAGE value="Unnötiger Code entfernt(z.B. require fs in app.js), Statuscodes überarbeitet" />
     <MESSAGE value="Get Zugriff auf anderen Server implementiert; bei POST Befehl einer Einkaufsliste wird der Preis des angegebenen Produkts ermittelt (noch teilweise fehlerhaft)" />
     <MESSAGE value="Preisermittlung einer Einkaufsliste eines Kunden bei jeweiligem Discounter" />
-    <option name="LAST_COMMIT_MESSAGE" value="Preisermittlung einer Einkaufsliste eines Kunden bei jeweiligem Discounter" />
+    <MESSAGE value="Fehlerkorrektur" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fehlerkorrektur" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/package.json">
@@ -307,20 +315,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -335,17 +329,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
+    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+        <state relative-caret-position="255">
+          <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
+    <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="909" selection-start-column="909" selection-end-column="909" />
+        <state relative-caret-position="-373">
+          <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
@@ -356,10 +357,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="261" selection-start-column="261" selection-end-column="261" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
-          <caret line="249" column="59" selection-start-line="249" selection-start-column="59" selection-end-line="249" selection-end-column="59" />
+          <caret line="321" column="75" selection-start-line="321" selection-start-column="75" selection-end-line="321" selection-end-column="75" />
         </state>
       </provider>
     </entry>
