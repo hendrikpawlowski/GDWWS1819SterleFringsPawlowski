@@ -10,8 +10,6 @@ const options = {
     method: "GET"
 };
 
-var DiscounterUri = "localhost:3069/discounter";
-
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
@@ -24,9 +22,6 @@ const ourUri = "localhost:3000";
  * Ein neuer Kunde wird angelegt
  */
 router.post("/", (req, res, next) => {
-
-    console.log(req.body);
-    console.log(req.body == {});
 
     if (req.body.name == undefined) {
         res.status(400).json({
@@ -242,21 +237,33 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     const currentKunde = findKundeByID(kundeID);
     const newId = generateNewID(currentKunde.einkaufslisten);
 
-    getDiscounterPreis(options, req.body.produkte);
+    http.request(options, function (res2) {
+        var body = "";
 
-    console.log(preis)
-    const newEinkaufsliste = {
-        uri: ourUri + req.originalUrl + "/" + newId,
-        id: newId,
-        produkte: req.body.produkte + " " + preis
-    }
+        res2.on("data", function (content) {
+            body += content;
+        });
 
-    currentKunde.einkaufslisten.push(newEinkaufsliste);
-    saveData();
+        res2.on("end", function() {
+            const sortiment = JSON.parse(body);
+            produkteArray = findProdukteByName(sortiment['sortiment'], req.body.produkte);
 
-    res.status(200).json({
-        kunde: currentKunde
-    })
+            const newEinkaufsliste = {
+                uri: ourUri + req.originalUrl + "/" + newId,
+                id: newId,
+                produkte: req.body.produkte
+            }
+
+            newEinkaufsliste.einkaufslisteBeiDiscounterLol = produkteArray;
+
+            currentKunde.einkaufslisten.push(newEinkaufsliste);
+            saveData();
+
+            res.status(200).json({
+                kunde: currentKunde
+            })
+        })
+    }).end();
 })
 
 
@@ -432,23 +439,37 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 }
 
 //findet Produkt in einem Array, anhand des angegebenen Namens
-const findProduktByName = function (array, name) {
+const findProdukteByName = function (discounterProdukte, kundeProdukte) {
 
-    for (let i = 0; i < array.length; i++) {
+    var gesamtPreis = 0;
+    var produktListe = new Array();
+    for (let i = 0; i < discounterProdukte.length; i++) {
 
-        if (array[i].name == name) {
+        for (let j = 0; j < kundeProdukte.length; j++)
 
-            return array[i];
-        }
+            if (discounterProdukte[i].name == kundeProdukte[j]) {
+
+                const newProdukt = {
+                    name: discounterProdukte[i].name,
+                    marke: discounterProdukte[i].marke,
+                    preis: discounterProdukte[i].preis
+                }
+                produktListe.push(newProdukt);
+                gesamtPreis += discounterProdukte[i].preis
+            }
     }
 
-    return false;
+    var einkaufslisteBeiDiscounterLol = {
+        gesamtPreis: gesamtPreis,
+        produktListe: produktListe
+    };
+    return einkaufslisteBeiDiscounterLol;
 }
 
 /* GET Zugriff auf Server (Server wird anhand der options bestimmt)
    Preis wird der Response, anhand des angegebenen Produktnamens entnommen
  */
-function getDiscounterPreis(options, produktName) {
+function getEinkaufslistePreis(options, produktName) {
         http.request(options, function (res) {
         var body = "";
 
