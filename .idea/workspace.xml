@@ -57,8 +57,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="55" lean-forward="true" selection-start-line="5" selection-start-column="55" selection-end-line="5" selection-end-column="55" />
+            <state relative-caret-position="731">
+              <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="249" column="59" selection-start-line="249" selection-start-column="59" selection-end-line="249" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -67,25 +76,7 @@
         <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="581" selection-start-column="581" selection-end-column="581" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="463" column="34" selection-start-line="463" selection-start-column="34" selection-end-line="463" selection-end-column="34" />
-              <folding>
-                <element signature="e#6024#6756#0" />
-                <element signature="e#6836#7602#0" />
-                <element signature="e#7807#7939#0" />
-                <element signature="e#8368#9157#0" />
-                <element signature="e#9283#9503#0" />
-                <element signature="e#9605#9771#0" />
-                <element signature="e#9952#10229#0" />
-              </folding>
+              <caret column="909" selection-start-column="909" selection-end-column="909" />
             </state>
           </provider>
         </entry>
@@ -102,8 +93,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="53" selection-start-column="53" selection-end-column="53" />
+            <state relative-caret-position="51">
+              <caret line="3" column="145" lean-forward="true" selection-start-line="3" selection-start-column="145" selection-end-line="3" selection-end-column="145" />
             </state>
           </provider>
         </entry>
@@ -162,6 +153,11 @@
               <item name="api" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
+              <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -218,7 +214,7 @@
       <workItem from="1546891461497" duration="4580000" />
       <workItem from="1546896081615" duration="1754000" />
       <workItem from="1548003660801" duration="13915000" />
-      <workItem from="1548069228706" duration="5862000" />
+      <workItem from="1548069228706" duration="7646000" />
     </task>
     <task id="LOCAL-00001" summary="Einkaufsliste kann nun hinzugefügt werden und bestimmtem Kunden zugeordnet werden.&#10;Kunde besteht nun zusätzlich aus einem Array für die Einkaufslisten">
       <created>1546896856027</created>
@@ -241,14 +237,21 @@
       <option name="project" value="LOCAL" />
       <updated>1548017057500</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Preisermittlung einer Einkaufsliste eines Kunden bei jeweiligem Discounter">
+      <created>1548075432304</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1548075432304</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26111000" />
+    <option name="totallyTimeSpent" value="27895000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18968935" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -262,7 +265,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3286119" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.3286119" />
@@ -278,7 +281,8 @@
     <MESSAGE value="Einkaufsliste kann nun hinzugefügt werden und bestimmtem Kunden zugeordnet werden.&#10;Kunde besteht nun zusätzlich aus einem Array für die Einkaufslisten" />
     <MESSAGE value="Unnötiger Code entfernt(z.B. require fs in app.js), Statuscodes überarbeitet" />
     <MESSAGE value="Get Zugriff auf anderen Server implementiert; bei POST Befehl einer Einkaufsliste wird der Preis des angegebenen Produkts ermittelt (noch teilweise fehlerhaft)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Get Zugriff auf anderen Server implementiert; bei POST Befehl einer Einkaufsliste wird der Preis des angegebenen Produkts ermittelt (noch teilweise fehlerhaft)" />
+    <MESSAGE value="Preisermittlung einer Einkaufsliste eines Kunden bei jeweiligem Discounter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Preisermittlung einer Einkaufsliste eines Kunden bei jeweiligem Discounter" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/package.json">
@@ -333,38 +337,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="55" lean-forward="true" selection-start-line="5" selection-start-column="55" selection-end-line="5" selection-end-column="55" />
+        <state relative-caret-position="731">
+          <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="581" selection-start-column="581" selection-end-column="581" />
+          <caret column="909" selection-start-column="909" selection-end-column="909" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="53" selection-start-column="53" selection-end-column="53" />
+        <state relative-caret-position="51">
+          <caret line="3" column="145" lean-forward="true" selection-start-line="3" selection-start-column="145" selection-end-line="3" selection-end-column="145" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="463" column="34" selection-start-line="463" selection-start-column="34" selection-end-line="463" selection-end-column="34" />
-          <folding>
-            <element signature="e#6024#6756#0" />
-            <element signature="e#6836#7602#0" />
-            <element signature="e#7807#7939#0" />
-            <element signature="e#8368#9157#0" />
-            <element signature="e#9283#9503#0" />
-            <element signature="e#9605#9771#0" />
-            <element signature="e#9952#10229#0" />
-          </folding>
+        <state relative-caret-position="221">
+          <caret line="249" column="59" selection-start-line="249" selection-start-column="59" selection-end-line="249" selection-end-column="59" />
         </state>
       </provider>
     </entry>

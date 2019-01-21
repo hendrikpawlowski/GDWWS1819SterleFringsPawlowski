@@ -246,7 +246,8 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
         res2.on("end", function() {
             const sortiment = JSON.parse(body);
-            produkteArray = findProdukteByName(sortiment['sortiment'], req.body.produkte);
+            console.log(sortiment);
+            produkteArray = findProdukteByName(sortiment['Sortiment'], req.body.produkte);
 
             const newEinkaufsliste = {
                 uri: ourUri + req.originalUrl + "/" + newId,
@@ -476,7 +477,8 @@ const findProdukteByName = function (discounterProdukte, kundeProdukte) {
                 const newProdukt = {
                     name: discounterProdukte[i].name,
                     marke: discounterProdukte[i].marke,
-                    preis: discounterProdukte[i].preis
+                    preis: discounterProdukte[i].preis,
+                    gewicht: discounterProdukte[i].gramm
                 }
                 produktListe.push(newProdukt);
                 gesamtPreis += discounterProdukte[i].preis

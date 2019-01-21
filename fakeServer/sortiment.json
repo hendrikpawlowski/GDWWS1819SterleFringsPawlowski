@@ -2,3 +2,7 @@
     {"id":2,"name":"Duplo","marke":"Kinder","preis":1.30,"gramm":70},{"id":1,"name":"Fischstäbchen","marke":"Iglo","preis":1.99,"gramm":150},
     {"id":4,"name":"Pick Up","marke":"Leibniz","preis":1.19,"gramm":50},{"id":5,"name":"Curry King XXL","marke":"Meica","preis":3.29,"gramm":120},
     {"id":6,"name":"Paprika Chips","marke":"Chio","preis":1.80,"gramm":33},{"id":5,"name":"Paniermehl","marke":"fleur","preis":2.10,"gramm":300}]
+<<<<<<< HEAD
+=======
+
+>>>>>>> ae29bce566a6dd17028c9c9397ae038ee9b941dc
