@@ -2,39 +2,33 @@ const express = require('express');
 const router = express.Router();
 const sortiment = require('../../sortiment');
 
-/*
- * GET Verb auf das komplette Sortiment des Discounters
- * Das Sortiment wird zurückgegeben
- */
+
 router.get("/",(req,res,next) => {
 
     res.status(200).json({
-        sortiment
+        Sortiment: sortiment
     });
 });
 
-/*
- * GET Verb auf ein spezielles Produkt
- * Das Produkt, mit dem die URI übereinstimmt wird zurückgegeben
- */
-router.get("/:produktID",(req,res,next) => {
 
-    const produktID = req.params.produktID;
+router.get("/:artikelID",(req,res,next) => {
 
-    if(!findProduktByID(produktID)){
+    const artikelID = req.params.artikelID;
+
+    if(!findArtikelByID(artikelID)){
         res.status(404).json({
             message: "404 Not Found",
-            problem: "Der Artikel mit der ID " + produktID + " existiert nicht"
+            problem: "Der Artikel mit der ID " + artikelID + " existiert nicht"
         })
     } else {
         res.status(200).json({
-            produkt: findProduktByID(produktID)
+            artikel: findArtikelByID(artikelID)
         })
     }
 });
 
 
-const findProduktByID = function (id) {
+const findArtikelByID = function (id) {
 
     for (let i = 0; i < sortiment.length; i++) {
 

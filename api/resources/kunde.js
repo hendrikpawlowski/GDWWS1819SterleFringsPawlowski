@@ -25,9 +25,6 @@ const ourUri = "localhost:3000";
  */
 router.post("/", (req, res, next) => {
 
-    console.log(req.body);
-    console.log(req.body == {});
-
     if (req.body.name == undefined) {
         res.status(400).json({
             message: "Missing body in this POST",
@@ -294,6 +291,32 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
             res.status(204);
         }
     }
+})
+
+
+router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
+
+    const kundeID = req.params.kundeID;
+
+    const currentKunde = findKundeByID(kundeID);
+
+    if (!findKundeByID(kundeID)) {
+        res.status(404).json({
+            message: "404 Not Found",
+            problem: "Ein Kunde mit der ID " + kundeID + " existiert nicht"
+        })
+        return;
+    }
+
+            currentKunde.einkaufslisten.splice(0, einkaufslisten.length);
+            saveData();
+
+            res.json({
+                Kunde: findKundeByID(kundeID)
+            })
+            res.status(204);
+        }
+    
 })
 
 
