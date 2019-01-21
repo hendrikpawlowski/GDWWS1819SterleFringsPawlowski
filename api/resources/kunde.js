@@ -237,16 +237,31 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     const currentKunde = findKundeByID(kundeID);
     const newId = generateNewID(currentKunde.einkaufslisten);
 
+    // const newEinkaufsliste = {
+    //     uri: ourUri + req.originalUrl + "/" + newId,
+    //     id: newId,
+    //     produkte: req.body.produkte
+    // }
+
+
+
+    // const discounterInformations = getDiscounterInformations(req, () => {
+
+    // newEinkaufsliste.discounterInformations = discounterInformations;
+
+    // currentKunde.einkaufslisten.push(newEinkaufsliste);
+    //  saveData();
+
     http.request(options, function (res2) {
         var body = "";
 
         res2.on("data", function (content) {
             body += content;
         });
-
-        res2.on("end", function() {
+        res2.on("end", function () {
+            
             const sortiment = JSON.parse(body);
-            produkteArray = findProdukteByName(sortiment['sortiment'], req.body.produkte);
+            produkteArray = findProdukteByName(sortiment['Sortiment'], req.body.produkte);
 
             const newEinkaufsliste = {
                 uri: ourUri + req.originalUrl + "/" + newId,
@@ -259,12 +274,45 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
             currentKunde.einkaufslisten.push(newEinkaufsliste);
             saveData();
 
-            res.status(200).json({
+            res.status(201).json({
                 kunde: currentKunde
             })
         })
     }).end();
 })
+
+// const getDiscounterInformations = function (req, callback) {
+
+//     http.request(options, function (res2) {
+//         var body = "";
+
+//         res2.on("data", function (content) {
+//             body += content;
+//         });
+
+//         res2.on("end", function () {
+//             const sortiment = JSON.parse(body);
+//             produkteArray = findProdukteByName(sortiment['sortiment'], req.body.produkte);
+
+//             // return produkteArray;
+//             callback();
+//             // const newEinkaufsliste = {
+//             //     uri: ourUri + req.originalUrl + "/" + newId,
+//             //     id: newId,
+//             //     produkte: req.body.produkte
+//             // }
+
+//             // newEinkaufsliste.einkaufslisteBeiDiscounterLol = produkteArray;
+
+//             // currentKunde.einkaufslisten.push(newEinkaufsliste);
+//             // saveData();
+
+//             // res.status(201).json({
+//             // kunde: currentKunde
+//             // })
+//         })
+//     }).end();
+// }
 
 
 
@@ -318,15 +366,13 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
         return;
     }
 
-            currentKunde.einkaufslisten.splice(0, einkaufslisten.length);
-            saveData();
+    currentKunde.einkaufslisten.splice(0, einkaufslisten.length);
+    saveData();
 
-            res.json({
-                Kunde: findKundeByID(kundeID)
-            })
-            res.status(204);
-        }
-    
+    res.json({
+        Kunde: findKundeByID(kundeID)
+    })
+    res.status(204);
 })
 
 
@@ -496,14 +542,14 @@ const findProdukteByName = function (discounterProdukte, kundeProdukte) {
    Preis wird der Response, anhand des angegebenen Produktnamens entnommen
  */
 function getEinkaufslistePreis(options, produktName) {
-        http.request(options, function (res) {
+    http.request(options, function (res) {
         var body = "";
 
         res.on("data", function (content) {
             body += content;
         });
 
-        res.on("end", function() {
+        res.on("end", function () {
             const sortiment = JSON.parse(body);
             preis = findProduktByName(sortiment['sortiment'], produktName).preis;
         })
