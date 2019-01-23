@@ -3,13 +3,6 @@ const router = express.Router();
 const fs = require('fs');
 const http = require('http');
 
-// const options = {
-//     host: "localhost",
-//     port: 3069,
-//     path: "/discounter",
-//     method: "GET"
-// };
-
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
@@ -237,178 +230,43 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const currentKunde = findKundeByID(kundeID);
     const newId = generateNewID(currentKunde.einkaufslisten)
-
+    const kundenEinkaufsliste = req.body.produkte;
 
     const newEinkaufsliste = {
         uri: ourUri + req.originalUrl + "/" + newId,
         id: newId,
-        produkte: req.body.produkte
+        produkte: kundenEinkaufsliste,
+        einkaufslisteBeiDiscounter: []
     }
 
-    const options = {
-        host: "localhost",
-        port: 3069,
-        path: "/discounter",
-        method: "GET"
-    };
+    currentKunde.einkaufslisten.push(newEinkaufsliste);
 
-    http.request(options, function (res2) {
-        var body = "";
+    // requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
 
-        res2.on("data", function (content) {
-            body += content;
-        });
-        res2.on("end", function () {
-
-            const sortiment = JSON.parse(body);
-            console.log(sortiment);
-            discounterInformationen = findProdukteByName(sortiment['Sortiment'], req.body.produkte);
-
-            newEinkaufsliste.einkaufslisteBeiDiscounterFake = discounterInformationen;
-
-            currentKunde.einkaufslisten.push(newEinkaufsliste);
-            saveData();
-
-            res.status(201).json({
-                kunde: currentKunde
-            })
-        })
-    }).end();
-
-
-    // const data = requestListeFromFakeServer(req.body.produkte);
-
-    // function hi(data) {
-
-    //     const newEinkaufsliste = {
-    //         uri: ourUri + req.originalUrl + "/" + newId,
-    //         id: newId,
-    //         produkte: req.body.produkte
-    //     }
-
-    //     newEinkaufsliste.einkaufslisteBeiFakeDiscounter = data;
-
-    //     currentKunde.einkaufslisten.push(newEinkaufsliste);
+    //     newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+    //     sortEinkaufslisteBeiDiscounter(currentKunde);
     //     saveData();
+    // })
 
-    //     res.status(200).json({
-    //         currentKunde: currentKunde
-    //     })
-    // }
-    // testFunction(req, res, currentKunde);
+    requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
 
+        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+        saveData();
+    })
+
+    requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
+
+        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+        saveData();
+    })
+
+    setTimeout(function () {
+        sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+        res.status(201).json({
+            newEinkaufsliste: newEinkaufsliste
+        })
+    }, 1000);
 })
-
-// const testFunction = function (req, res, currentKunde) {
-
-//     const produkteBeiDiscounter1 = request1(req.body.produkte);
-//     // const produkteBeiDiscounter2 = request2(req.body.produkte);
-//     console.log(produkteBeiDiscounter1);
-//     // console.log(produkteBeiDiscounter2);
-
-//     const newId = generateNewID(currentKunde.einkaufslisten);
-
-//     const newEinkaufsliste = {
-//         uri: ourUri + req.originalUrl + "/" + newId,
-//         id: newId,
-//         produkte: req.body.produkte
-//     }
-
-//     newEinkaufsliste.discounter1 = produkteBeiDiscounter1;
-//     // newEinkaufsliste.discounter2 = produkteBeiDiscounter2;
-
-//     currentKunde.einkaufslisten.push(newEinkaufsliste);
-
-//     res.status(200).json({
-//         currentKunde: currentKunde
-//     })
-// }
-
-const requestListeFromFakeServer = function (kundenEinkaufsliste) {
-
-    const options = {
-        host: "localhost",
-        port: 3069,
-        path: "/discounter",
-        method: "GET"
-    };
-
-    http.request(options, function (res2) {
-
-        var body = "";
-
-        res2.on("data", function (content) {
-            body += content;
-        });
-
-        res2.on("end", function () {
-            const sortiment = JSON.parse(body);
-            produkteArray = findProdukteByName(sortiment['Sortiment'], kundenEinkaufsliste);
-            console.log(produkteArray);
-            return produkteArray;
-        });
-
-    }).end();
-}
-
-const requestListeFromAldiServer = function () {
-
-    const options = {
-        host: "localhost",
-        port: 3070,
-        path: "/discounter",
-        method: "GET"
-    };
-
-    http.request(options, function (res2) {
-
-        var body = "";
-
-        res2.on("data", function (content) {
-            body += content;
-        });
-
-        res2.on("end", function () {
-            console.log("Hi")
-            console.log(body);
-            return body;
-        });
-
-    }).end();
-}
-
-// const getDiscounterInformations = function (req, callback) {
-
-//     http.request(options, function (res2) {
-//         var body = "";
-
-//         res2.on("data", function (content) {
-//             body += content;
-//         });
-
-//         res2.on("end", function () {
-//             const sortiment = JSON.parse(body);
-//             produkteArray = findProdukteByName(sortiment['sortiment'], req.body.produkte);
-
-//             // return produkteArray;
-//             callback();
-//             // const newEinkaufsliste = {
-//             //     uri: ourUri + req.originalUrl + "/" + newId,
-//             //     id: newId,
-//             //     produkte: req.body.produkte
-//             // }
-
-//             // newEinkaufsliste.einkaufslisteBeiDiscounterLol = produkteArray;
-
-//             // currentKunde.einkaufslisten.push(newEinkaufsliste);
-//             // saveData();
-
-//             // res.status(201).json({
-//             // kunde: currentKunde
-//             // })
-//         })
-//     }).end();
-// }
 
 
 
@@ -574,6 +432,23 @@ const sortKundenListe = function () {
     });
 };
 
+/*
+ * sortEinkaufslisteBeiDiscounter ist dazu da die komplette KundenListe nach IDs zu sortieren
+ */
+const sortEinkaufslisteBeiDiscounter = function (currentEinkaufsliste) {
+
+    currentEinkaufsliste.einkaufslisteBeiDiscounter.sort(function (a, b) {
+        if (a.gesamtPreis > b.gesamtPreis) {
+            return 1;
+        }
+        if (a.gesamtPreis < b.gesamtPreis) {
+            return -1;
+        }
+        // a muss gleich b sein
+        return 0;
+    });
+};
+
 
 //findet Kunden in der kundenListe, anhand der angegebenen ID
 const findKundeByID = function (id) {
@@ -607,7 +482,7 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 }
 
 //findet Produkt in einem Array, anhand des angegebenen Namens
-const findProdukteByName = function (discounterProdukte, kundeProdukte) {
+const findProdukteByName = function (discounterName, discounterProdukte, kundeProdukte) {
 
     var gesamtPreis = 0;
     var produktListe = new Array();
@@ -628,11 +503,12 @@ const findProdukteByName = function (discounterProdukte, kundeProdukte) {
             }
     }
 
-    var einkaufslisteBeiDiscounterLol = {
+    var einkaufsliste = {
+        name: discounterName,
         gesamtPreis: gesamtPreis.toFixed(2),
         produktListe: produktListe
     };
-    return einkaufslisteBeiDiscounterLol;
+    return einkaufsliste;
 }
 
 /* GET Zugriff auf Server (Server wird anhand der options bestimmt)
@@ -650,6 +526,62 @@ function getEinkaufslistePreis(options, produktName) {
             const sortiment = JSON.parse(body);
             preis = findProduktByName(sortiment['sortiment'], produktName).preis;
         })
+    }).end();
+}
+
+
+
+// REQUESTS AN UNERE SERVER
+
+const requestFakeServer = function (kundenEinkaufsliste, callback) {
+
+    const options = {
+        host: "localhost",
+        port: 3069,
+        path: "/discounter",
+        method: "GET"
+    };
+
+    http.request(options, function (res2) {
+
+        var body = "";
+
+        res2.on("data", function (content) {
+            body += content;
+        });
+
+        res2.on("end", function () {
+            const sortiment = JSON.parse(body);
+            produkteArray = findProdukteByName("Fake Server", sortiment['Sortiment'], kundenEinkaufsliste);
+            console.log(produkteArray);
+            callback(produkteArray);
+        });
+
+    }).end();
+}
+
+const requestAldiServer = function (kundenEinkaufsliste, callback) {
+
+    const options = {
+        host: "localhost",
+        port: 3070,
+        path: "/aldiDiscounter",
+        method: "GET"
+    };
+
+    http.request(options, function (res2) {
+
+        var body = "";
+
+        res2.on("data", function (content) {
+            body += content;
+        });
+
+        res2.on("end", function () {
+            const aldiSortiment = JSON.parse(body).AldiSortiment;
+            produkteArray = findProdukteByName("Aldi", aldiSortiment, kundenEinkaufsliste);
+            callback(produkteArray);
+        });
     }).end();
 }
 
