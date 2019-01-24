@@ -21,7 +21,7 @@
         <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
+              <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
+              <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -48,7 +48,7 @@
         <entry file="file://$PROJECT_DIR$/fakeServer/fakeServer.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="34" lean-forward="true" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -56,17 +56,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-373">
+            <state relative-caret-position="34">
               <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="321" column="75" selection-start-line="321" selection-start-column="75" selection-end-line="321" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -75,7 +66,7 @@
         <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="261" selection-start-column="261" selection-end-column="261" />
+              <caret column="1022" selection-start-column="1022" selection-end-column="1022" />
             </state>
           </provider>
         </entry>
@@ -83,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="51">
+              <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -93,7 +84,32 @@
         <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
-              <caret line="3" column="145" lean-forward="true" selection-start-line="3" selection-start-column="145" selection-end-line="3" selection-end-column="145" />
+              <caret line="3" column="101" selection-start-line="3" selection-start-column="91" selection-end-line="3" selection-end-column="101" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+              <folding>
+                <element signature="e#1214#1286#0" />
+                <element signature="e#1446#1785#0" />
+                <element signature="e#1959#2543#0" />
+                <element signature="e#3425#3868#0" />
+                <element signature="e#4098#4464#0" />
+                <element signature="e#6527#7259#0" />
+                <element signature="e#7324#7810#0" />
+                <element signature="e#8861#8993#0" />
+                <element signature="e#9422#10211#0" />
+                <element signature="e#10337#10557#0" />
+                <element signature="e#10732#11024#0" />
+                <element signature="e#11126#11292#0" />
+                <element signature="e#11473#11750#0" />
+                <element signature="e#11903#12724#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -125,9 +141,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="width" value="978" />
-    <option name="height" value="1039" />
+    <option name="x" value="950" />
+    <option name="width" value="979" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -213,7 +229,10 @@
       <workItem from="1546891461497" duration="4580000" />
       <workItem from="1546896081615" duration="1754000" />
       <workItem from="1548003660801" duration="13915000" />
-      <workItem from="1548069228706" duration="8458000" />
+      <workItem from="1548069228706" duration="11717000" />
+      <workItem from="1548234557408" duration="10317000" />
+      <workItem from="1548266037085" duration="731000" />
+      <workItem from="1548317373554" duration="1569000" />
     </task>
     <task id="LOCAL-00001" summary="Einkaufsliste kann nun hinzugefügt werden und bestimmtem Kunden zugeordnet werden.&#10;Kunde besteht nun zusätzlich aus einem Array für die Einkaufslisten">
       <created>1546896856027</created>
@@ -250,15 +269,21 @@
       <option name="project" value="LOCAL" />
       <updated>1548077190784</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Fehlerkorrektur">
+      <created>1548077933933</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1548077933933</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28707000" />
+    <option name="totallyTimeSpent" value="44583000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18968935" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -308,6 +333,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/resources/gettingDataFromAPITest.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -318,56 +350,65 @@
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/fakeServer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="9" column="34" lean-forward="true" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="16" lean-forward="true" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
+          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-373">
+        <state relative-caret-position="34">
           <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="145" lean-forward="true" selection-start-line="3" selection-start-column="145" selection-end-line="3" selection-end-column="145" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="261" selection-start-column="261" selection-end-column="261" />
+          <caret column="1022" selection-start-column="1022" selection-end-column="1022" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="101" selection-start-line="3" selection-start-column="91" selection-end-line="3" selection-end-column="101" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="321" column="75" selection-start-line="321" selection-start-column="75" selection-end-line="321" selection-end-column="75" />
+        <state relative-caret-position="153">
+          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+          <folding>
+            <element signature="e#1214#1286#0" />
+            <element signature="e#1446#1785#0" />
+            <element signature="e#1959#2543#0" />
+            <element signature="e#3425#3868#0" />
+            <element signature="e#4098#4464#0" />
+            <element signature="e#6527#7259#0" />
+            <element signature="e#7324#7810#0" />
+            <element signature="e#8861#8993#0" />
+            <element signature="e#9422#10211#0" />
+            <element signature="e#10337#10557#0" />
+            <element signature="e#10732#11024#0" />
+            <element signature="e#11126#11292#0" />
+            <element signature="e#11473#11750#0" />
+            <element signature="e#11903#12724#0" />
+          </folding>
         </state>
       </provider>
     </entry>

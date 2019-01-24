@@ -7,7 +7,7 @@ const http = require('http');
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
 
-const ourUri = "localhost:3000";
+const ourUri = "localhost:3001";
 
 
 /*
@@ -200,8 +200,6 @@ router.get("/:kundeID/einkaufsliste", (req, res, next) => {
     }
 })
 
-
-var preis = 0;
 /*
  * POST Verb auf Einkaufsliste
  * Es wird eine neue Einkaufsliste für den Kunden mit der jeweiligen KundenID erstellt
@@ -241,13 +239,6 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     currentKunde.einkaufslisten.push(newEinkaufsliste);
 
-    // requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
-
-    //     newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-    //     sortEinkaufslisteBeiDiscounter(currentKunde);
-    //     saveData();
-    // })
-
     requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
 
         newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
@@ -260,6 +251,7 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
         saveData();
     })
 
+    //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
     setTimeout(function () {
         sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
         res.status(201).json({
@@ -356,9 +348,31 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     kundeUndEinkaufsliste.produkte = req.body.produkte;
     saveData();
 
-    res.status(200).json({
-        changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
+    kundeUndEinkaufsliste.einkaufslisteBeiDiscounter = [];
+
+    requestAldiServer(kundeUndEinkaufsliste.produkte, function (resultAldiServer) {
+
+        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+        saveData();
     })
+
+    requestFakeServer(kundeUndEinkaufsliste.produkte, function (resultFakeServer) {
+
+        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+        saveData();
+    })
+
+    //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
+    setTimeout(function () {
+        sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
+        res.status(200).json({
+            Einkaufsliste: kundeUndEinkaufsliste
+        })
+    }, 1000);
+
+    /*res.status(200).json({
+        changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
+    })*/
 })
 
 
@@ -511,30 +525,11 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
     return einkaufsliste;
 }
 
-/* GET Zugriff auf Server (Server wird anhand der options bestimmt)
-   Preis wird der Response, anhand des angegebenen Produktnamens entnommen
- */
-function getEinkaufslistePreis(options, produktName) {
-    http.request(options, function (res) {
-        var body = "";
-
-        res.on("data", function (content) {
-            body += content;
-        });
-
-        res.on("end", function () {
-            const sortiment = JSON.parse(body);
-            preis = findProduktByName(sortiment['sortiment'], produktName).preis;
-        })
-    }).end();
-}
-
-
-
 // REQUESTS AN UNERE SERVER
 
-const requestFakeServer = function (kundenEinkaufsliste, callback) {
 
+const requestFakeServer = function (kundenEinkaufsliste, callback) {
+    //notwendige Informtionen, um Server per http.request anzusprechen
     const options = {
         host: "localhost",
         port: 3069,
@@ -562,6 +557,7 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
 
 const requestAldiServer = function (kundenEinkaufsliste, callback) {
 
+    //notwendige Informtionen, um Server per http.request anzusprechen
     const options = {
         host: "localhost",
         port: 3070,
