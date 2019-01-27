@@ -2,11 +2,11 @@ const express = require('express');
 const aldiApp = express();
 const bodyParser = require("body-parser");
 
-const discounterRoutes = require('./api/resources/aldiDiscounter');
+const discounterRoutes = require('./api/resources/aldiSortiment');
 
 aldiApp.use(bodyParser.json());
 
-aldiApp.use('/aldiDiscounter', discounterRoutes);
+aldiApp.use('/aldiSortiment', discounterRoutes);
 
 // ERROR Handling
 aldiApp.use((req, res, next) => {
@@ -16,7 +16,7 @@ aldiApp.use((req, res, next) => {
     next(error);
 });
 
-aldiApp.use((error, req, res, next) => {
+aldiApp.use((error, req, res) => {
     // 500 = Internal Error
     res.status(error.status || 500);
     res.json({

@@ -2,11 +2,11 @@ const express = require('express');
 const fakeapp = express();
 const bodyParser = require("body-parser");
 
-const discounterRoutes = require('./api/resources/discounter');
+const discounterRoutes = require('./api/resources/sortiment');
 
 fakeapp.use(bodyParser.json());
 
-fakeapp.use('/discounter', discounterRoutes);
+fakeapp.use('/sortiment', discounterRoutes);
 
 // ERROR Handling
 fakeapp.use((req, res, next) => {
@@ -16,7 +16,7 @@ fakeapp.use((req, res, next) => {
     next(error);
 });
 
-fakeapp.use((error, req, res, next) => {
+fakeapp.use((error, req, res) => {
     // 500 = Internal Error
     res.status(error.status || 500);
     res.json({
@@ -25,7 +25,5 @@ fakeapp.use((error, req, res, next) => {
         }
     })
 });
-
-//Hendrik wenn du das liest, deine Kommentare sind jetzt der hammer :*
 
 module.exports = fakeapp;

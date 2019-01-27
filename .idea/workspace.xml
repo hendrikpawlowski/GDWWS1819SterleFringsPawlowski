@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8d27ca1-9709-4764-bc7a-e66d81edd07f" name="Default Changelist" comment="">
+    <list default="true" id="b8d27ca1-9709-4764-bc7a-e66d81edd07f" name="Default Changelist" comment="Dateinamen umbenannt; DELETE Response überarbeitet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aldiServer/aldiApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/aldiServer/aldiApp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aldiServer/aldiSortiment.json" beforeDir="false" afterPath="$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aldiServer/api/resources/aldiDiscounter.js" beforeDir="false" afterPath="$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/resources/kunde.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/resources/kunde.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fakeServer/api/resources/discounter.js" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/api/resources/sortiment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fakeServer/fakeApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/fakeApp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fakeServer/sortiment.json" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/sortimentDatenbank.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kundenDatenbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/kundenDatenbank.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -20,17 +26,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/resources/gettingDataFromAPITest.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="24" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="24" />
+            <state relative-caret-position="154">
+              <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -39,76 +36,80 @@
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
+              <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fakeServer/fakeServer.js">
+        <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/sortiment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+            <state relative-caret-position="221">
+              <caret line="13" column="44" lean-forward="true" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/aldiServer/aldiApp.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
+        <entry file="file://$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+            <state relative-caret-position="290">
+              <caret line="41" column="2" selection-start-line="41" selection-start-column="2" selection-end-line="41" selection-end-column="2" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/aldiServer/aldiServer.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="1022" selection-start-column="1022" selection-end-column="1022" />
+              <caret column="1" selection-start-column="1" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server.js">
+        <entry file="file://$PROJECT_DIR$/fakeServer/sortimentDatenbank.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+            <state relative-caret-position="85">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="101" selection-start-line="3" selection-start-column="91" selection-end-line="3" selection-end-column="101" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+            <state relative-caret-position="-237">
+              <caret line="549" column="107" selection-start-line="549" selection-start-column="107" selection-end-line="549" selection-end-column="107" />
               <folding>
+                <element signature="e#407#1100#0" />
                 <element signature="e#1214#1286#0" />
                 <element signature="e#1446#1785#0" />
                 <element signature="e#1959#2543#0" />
+                <element signature="e#2704#3219#0" />
                 <element signature="e#3425#3868#0" />
                 <element signature="e#4098#4464#0" />
-                <element signature="e#6527#7259#0" />
-                <element signature="e#7324#7810#0" />
-                <element signature="e#8861#8993#0" />
-                <element signature="e#9422#10211#0" />
-                <element signature="e#10337#10557#0" />
-                <element signature="e#10732#11024#0" />
-                <element signature="e#11126#11292#0" />
-                <element signature="e#11473#11750#0" />
-                <element signature="e#11903#12724#0" />
+                <element signature="e#7707#9203#0" />
               </folding>
             </state>
           </provider>
@@ -120,7 +121,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/fakeServer/api/resources/sortiment.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/api/resources/kunde.js" root0="SKIP_INSPECTION" />
   </component>
   <component name="IdeDocumentHistory">
@@ -131,18 +132,21 @@
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/fakeServer/fakeServer.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/fakeServer/fakeApp.js" />
         <option value="$PROJECT_DIR$/api/resources/gettingDataFromAPITest.js" />
         <option value="$PROJECT_DIR$/fakeServer/api/resources/discounter.js" />
-        <option value="$PROJECT_DIR$/kundenDatenbank.json" />
         <option value="$PROJECT_DIR$/fakeServer/sortiment.json" />
+        <option value="$PROJECT_DIR$/fakeServer/api/resources/sortiment.js" />
+        <option value="$PROJECT_DIR$/kundenDatenbank.json" />
         <option value="$PROJECT_DIR$/api/resources/kunde.js" />
+        <option value="$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js" />
+        <option value="$PROJECT_DIR$/fakeServer/fakeApp.js" />
+        <option value="$PROJECT_DIR$/aldiServer/aldiApp.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="950" />
-    <option name="width" value="979" />
+    <option name="width" value="980" />
     <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
@@ -150,6 +154,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -160,11 +165,18 @@
             <path>
               <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
               <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
+              <item name="aldiServer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
+              <item name="aldiServer" type="462c0819:PsiDirectoryNode" />
               <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
               <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
+              <item name="aldiServer" type="462c0819:PsiDirectoryNode" />
               <item name="api" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -173,11 +185,23 @@
               <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
               <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
+              <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
+              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
+              <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -232,7 +256,9 @@
       <workItem from="1548069228706" duration="11717000" />
       <workItem from="1548234557408" duration="10317000" />
       <workItem from="1548266037085" duration="731000" />
-      <workItem from="1548317373554" duration="1569000" />
+      <workItem from="1548317373554" duration="2421000" />
+      <workItem from="1548337053494" duration="2320000" />
+      <workItem from="1548598163701" duration="4212000" />
     </task>
     <task id="LOCAL-00001" summary="Einkaufsliste kann nun hinzugefügt werden und bestimmtem Kunden zugeordnet werden.&#10;Kunde besteht nun zusätzlich aus einem Array für die Einkaufslisten">
       <created>1546896856027</created>
@@ -276,11 +302,18 @@
       <option name="project" value="LOCAL" />
       <updated>1548077933933</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="PUT auf Einkaufsliste liefert nun auch Berechnung des Preises der Einkaufsliste anhand der Discounter">
+      <created>1548319208446</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1548319208446</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44583000" />
+    <option name="totallyTimeSpent" value="51967000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -315,7 +348,9 @@
     <MESSAGE value="Get Zugriff auf anderen Server implementiert; bei POST Befehl einer Einkaufsliste wird der Preis des angegebenen Produkts ermittelt (noch teilweise fehlerhaft)" />
     <MESSAGE value="Preisermittlung einer Einkaufsliste eines Kunden bei jeweiligem Discounter" />
     <MESSAGE value="Fehlerkorrektur" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fehlerkorrektur" />
+    <MESSAGE value="PUT auf Einkaufsliste liefert nun auch Berechnung des Preises der Einkaufsliste anhand der Discounter" />
+    <MESSAGE value="Dateinamen umbenannt; DELETE Response überarbeitet" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dateinamen umbenannt; DELETE Response überarbeitet" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/package.json">
@@ -333,10 +368,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
+    <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
+        <state relative-caret-position="51">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fakeServer/fakeServer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -347,68 +389,75 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/fakeServer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/discounter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="1022" selection-start-column="1022" selection-end-column="1022" />
+          <caret column="1" selection-start-column="1" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
+    <entry file="file://$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/sortiment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        <state relative-caret-position="221">
+          <caret line="13" column="44" lean-forward="true" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/sortiment.json">
+    <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="101" selection-start-line="3" selection-start-column="91" selection-end-line="3" selection-end-column="101" />
+        <state relative-caret-position="153">
+          <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+        <state relative-caret-position="-237">
+          <caret line="549" column="107" selection-start-line="549" selection-start-column="107" selection-end-line="549" selection-end-column="107" />
           <folding>
+            <element signature="e#407#1100#0" />
             <element signature="e#1214#1286#0" />
             <element signature="e#1446#1785#0" />
             <element signature="e#1959#2543#0" />
+            <element signature="e#2704#3219#0" />
             <element signature="e#3425#3868#0" />
             <element signature="e#4098#4464#0" />
-            <element signature="e#6527#7259#0" />
-            <element signature="e#7324#7810#0" />
-            <element signature="e#8861#8993#0" />
-            <element signature="e#9422#10211#0" />
-            <element signature="e#10337#10557#0" />
-            <element signature="e#10732#11024#0" />
-            <element signature="e#11126#11292#0" />
-            <element signature="e#11473#11750#0" />
-            <element signature="e#11903#12724#0" />
+            <element signature="e#7707#9203#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fakeServer/sortimentDatenbank.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aldiServer/aldiServer.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="41" column="2" selection-start-line="41" selection-start-column="2" selection-end-line="41" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aldiServer/aldiApp.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
         </state>
       </provider>
     </entry>

@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const aldiSortiment = require('../../aldiSortiment');
+const aldiSortimentDatenbank = require('../../aldiSortimentDatenbank');
 
 
-router.get("/",(req,res,next) => {
+router.get("/",(req,res) => {
 
     res.status(200).json({
-        AldiSortiment: aldiSortiment
+        AldiSortiment: aldiSortimentDatenbank
     });
 });
 
 
-router.get("/:artikelID",(req,res,next) => {
+router.get("/:artikelID",(req,res) => {
 
     const artikelID = req.params.artikelID;
 
@@ -30,15 +30,15 @@ router.get("/:artikelID",(req,res,next) => {
 
 const findArtikelByID = function (id) {
 
-    for (let i = 0; i < aldiSortiment.length; i++) {
+    for (let i = 0; i < aldiSortimentDatenbank.length; i++) {
 
-        if (aldiSortiment[i].id == id) {
+        if (aldiSortimentDatenbank[i].id === id) {
 
-            return aldiSortiment[i];
+            return aldiSortimentDatenbank[i];
         }
     }
 
     return false;
-}
+};
 
 module.exports = router;

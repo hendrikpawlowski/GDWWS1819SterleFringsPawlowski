@@ -144,7 +144,7 @@ router.delete("/:kundeID", (req, res, next) => {
     }
 
     res.json({
-        neueKundenListe: kundenListe
+        message: "204 Kunde " + kundeID + " erfolgreich gelöscht"
     });
     res.status(204);
 })
@@ -290,8 +290,8 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
             saveData();
 
             res.json({
-                Kunde: findKundeByID(kundeID)
-            })
+                message: "204 Einkaufsliste " + einkaufslisteID + " von Kunde " + kundeID + " erfolgreich gelöscht"
+            });
             res.status(204);
         }
     }
@@ -316,8 +316,8 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
     saveData();
 
     res.json({
-        Kunde: findKundeByID(kundeID)
-    })
+        message: "204 Alle Einkaufslisten von Kunde " + kundeID + " erfolgreich gelöscht"
+    });
     res.status(204);
 })
 
@@ -533,7 +533,7 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
     const options = {
         host: "localhost",
         port: 3069,
-        path: "/discounter",
+        path: "/sortiment",
         method: "GET"
     };
 
@@ -548,7 +548,6 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
         res2.on("end", function () {
             const sortiment = JSON.parse(body);
             produkteArray = findProdukteByName("Fake Server", sortiment['Sortiment'], kundenEinkaufsliste);
-            console.log(produkteArray);
             callback(produkteArray);
         });
 
@@ -561,7 +560,7 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
     const options = {
         host: "localhost",
         port: 3070,
-        path: "/aldiDiscounter",
+        path: "/aldiSortiment",
         method: "GET"
     };
 
