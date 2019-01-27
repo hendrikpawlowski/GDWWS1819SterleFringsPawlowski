@@ -231,6 +231,9 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
         saveData();
     })
 
+
+    // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
+    // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
     setTimeout(function () {
         sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
         res.status(201).json({
@@ -328,6 +331,8 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
         saveData();
     })
 
+    // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
+    // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
     setTimeout(function () {
         sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
         res.status(200).json({
