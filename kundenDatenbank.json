@@ -1,1 +1,1 @@
-[{"uri":"localhost:3001/kunde/1","id":1,"name":"hello","einkaufslisten":[]}]
+[{"uri":"localhost:3001/kunde/1","id":1,"name":"hello","einkaufslisten":[{"uri":"localhost:3001/kunde/1/einkaufsliste/1","id":1,"produkte":["Duplo"],"einkaufslisteBeiDiscounter":["error","error"]},{"uri":"localhost:3001/kunde/1/einkaufsliste/2","id":2,"produkte":["Duplo"],"einkaufslisteBeiDiscounter":[]},{"uri":"localhost:3001/kunde/1/einkaufsliste/3","id":3,"produkte":["Duplo"],"einkaufslisteBeiDiscounter":[]}]}]

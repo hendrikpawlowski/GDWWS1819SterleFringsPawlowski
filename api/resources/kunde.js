@@ -3,12 +3,10 @@ const router = express.Router();
 const fs = require('fs');
 const http = require('http');
 
-
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
 
 const ourUri = "localhost:3001";
-
 
 /*
  * POST Verb auf Kunde
@@ -47,8 +45,6 @@ router.post("/", (req, res, next) => {
     });
 })
 
-
-
 /*
  * GET Verb auf alle Kunden
  * Die Kundenliste wird zurückgegeben
@@ -59,9 +55,6 @@ router.get("/", (req, res, next) => {
         KundenListe: kundenListe
     });
 })
-
-
-
 
 /*
  * GET Verb auf einen speziellen Kunden
@@ -82,8 +75,6 @@ router.get("/:kundeID", (req, res, next) => {
         })
     }
 })
-
-
 
 /*
  * PUT Verb auf einen speziellen Kunden
@@ -117,8 +108,6 @@ router.put("/:kundeID", (req, res, next) => {
     })
 })
 
-
-
 /*
  * DELETE Verb auf einen speziellen Kunden
  * Der Kunde, mit dem die URI übereinstimmt, wird gelöscht
@@ -146,8 +135,6 @@ router.delete("/:kundeID", (req, res, next) => {
     res.send("204 Kunde " + kundeID + " erfolgreich gelöscht").status(204);
 })
 
-
-
 /*
  * GET Verb auf eine spezielle Einkaufsliste
  * Die Einkaufsliste mit der übereinstimmenden URI soll ausgegeben werden
@@ -166,13 +153,10 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
         return;
     }
 
-
     res.status(200).json({
         einkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
     })
 })
-
-
 
 /*
  * GET Verb auf alle Einkaufslisten eines speziellen Kunden
@@ -222,7 +206,6 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
         return;
     }
 
-
     const currentKunde = findKundeByID(kundeID);
     const newId = generateNewID(currentKunde.einkaufslisten)
     const kundenEinkaufsliste = req.body.produkte;
@@ -235,49 +218,26 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     }
 
     currentKunde.einkaufslisten.push(newEinkaufsliste);
+    saveData();
 
     requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
-
-        if(resultAldiServer === "error") {
-            res.send("Server nicht erreichbar").status(444);
-            return;
-        }
-            newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-            saveData();
-
-            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
-            setTimeout(function () {
-                sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
-                res.status(201).json({
-                    newEinkaufsliste: newEinkaufsliste
-                })
-            }, 1000);
+        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+        saveData();
 
     })
 
     requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
-
-        if(resultFakeServer === "error") {
-            res.send("Server nicht erreichbar").status(444);
-            return;
-        }
-
-            newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-            saveData();
-
-            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
-            setTimeout(function () {
-                sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
-                res.status(201).json({
-                    newEinkaufsliste: newEinkaufsliste
-                })
-            }, 1000);
-
+        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+        saveData();
     })
 
+    setTimeout(function () {
+        sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+        res.status(201).json({
+            newEinkaufsliste: newEinkaufsliste
+        })
+    }, 1000);
 })
-
-
 
 /*
  * DELETE Verb auf eine spezielle Einkaufsliste
@@ -311,7 +271,6 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     }
 })
 
-
 router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
 
     const kundeID = req.params.kundeID;
@@ -331,8 +290,6 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
 
     res.send("204 Alle Einkaufslisten von Kunde " + kundeID + " erfolgreich gelöscht").status(204);
 })
-
-
 
 router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
@@ -362,53 +319,25 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     kundeUndEinkaufsliste.einkaufslisteBeiDiscounter = [];
 
     requestAldiServer(kundeUndEinkaufsliste.produkte, function (resultAldiServer) {
-
-        if(resultAldiServer === "error") {
-            res.send("Server nicht erreichbar").status(444);
-            return;
-        }
-            kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-            saveData();
-
-            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
-            setTimeout(function () {
-                sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
-                res.status(200).json({
-                    Einkaufsliste: kundeUndEinkaufsliste
-                })
-            }, 1000);
-
+        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+        saveData();
     })
 
     requestFakeServer(kundeUndEinkaufsliste.produkte, function (resultFakeServer) {
-
-        if(resultFakeServer === "error") {
-            res.send("Server nicht erreichbar").status(444);
-            return;
-        }
-            kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-            saveData();
-
-            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
-            setTimeout(function () {
-                sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
-                res.status(200).json({
-                    Einkaufsliste: kundeUndEinkaufsliste
-                })
-            }, 1000);
-
+        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+        saveData();
     })
 
-    /*res.status(200).json({
-        changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
-    })*/
+    setTimeout(function () {
+        sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
+        res.status(200).json({
+            einkaufsliste: kundeUndEinkaufsliste
+        })
+    }, 1000);
+
 })
 
-
-
 // HILFS FUNKTIONEN
-
-
 
 /*
  * saveData ist dazu da, um Daten, die in unserer lokalen Datenbank, in Benutzung unserer Anwendung, geändert
@@ -420,15 +349,10 @@ const saveData = function () {
     });
 }
 
-
-
 /*
  * Mit generateNewID soll jedem Element in einem Array automatisch eine ID zugeteilt werden
  * Falls im Laufe der Zeit IDs wieder frei werden, sollen jene mithilfe dieser Funktion
  * ausfindig gemacht werden
- * Bsp: Es existieren folgende Kunden: 1, 2, 3, 4
- * Im Laufe der Zeit wird der Kunde mit der ID 2 gelöscht
- * Wird nun ein neuer Kunde erstellt, so bekommt er die ID = 2
  */
 const generateNewID = function (array) {
 
@@ -455,8 +379,6 @@ const generateNewID = function (array) {
         token = false;
     }
 }
-
-
 
 /*
  * sortKundenListe ist dazu da die komplette KundenListe nach IDs zu sortieren
@@ -493,7 +415,7 @@ const sortEinkaufslisteBeiDiscounter = function (currentEinkaufsliste) {
 };
 
 
-//findet Kunden in der kundenListe, anhand der angegebenen ID
+// Findet Kunden in der kundenListe, anhand der angegebenen ID
 const findKundeByID = function (id) {
 
     for (let i = 0; i < kundenListe.length; i++) {
@@ -508,7 +430,7 @@ const findKundeByID = function (id) {
 }
 
 
-//finden Einkaufsliste in der kundenListe, anhand der angegebenen kundenID und der angegebenen einkaufslistenID
+// Finden Einkaufsliste in der kundenListe, anhand der angegebenen kundenID und der angegebenen einkaufslistenID
 const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 
     const currentKunde = findKundeByID(kundeID);
@@ -524,7 +446,7 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
     return false;
 }
 
-//findet Produkt in einem Array, anhand des angegebenen Namens
+// Findet Produkt in einem Array, anhand des angegebenen Namens
 const findProdukteByName = function (discounterName, discounterProdukte, kundeProdukte) {
 
     var gesamtPreis = 0;
@@ -558,7 +480,7 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
 
 
 const requestFakeServer = function (kundenEinkaufsliste, callback) {
-    //notwendige Informtionen, um Server per http.request anzusprechen
+    // Notwendige Informtionen, um Server per http.request anzusprechen
     const options = {
         host: "localhost",
         port: 3069,
@@ -582,10 +504,9 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
 
     });
 
-    //Server konnte nicht erreicht werden
+    // Server konnte nicht erreicht werden
     request.on("error", function (err) {
-        callback("error");
-        console.log("error gefangen");
+        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
     });
 
     request.end();
@@ -593,7 +514,7 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
 
 const requestAldiServer = function (kundenEinkaufsliste, callback) {
 
-    //notwendige Informtionen, um Server per http.request anzusprechen
+    // Notwendige Informtionen, um Server per http.request anzusprechen
     const options = {
         host: "localhost",
         port: 3070,
@@ -617,10 +538,9 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
 
     });
 
-    //Server konnte nicht erreicht werden
+    // Server konnte nicht erreicht werden
     request.on("error", function (err) {
-        callback("error");
-        console.log("error gefangen");
+        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
     });
 
     request.end();
