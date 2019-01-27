@@ -143,10 +143,7 @@ router.delete("/:kundeID", (req, res, next) => {
         }
     }
 
-    res.json({
-        message: "204 Kunde " + kundeID + " erfolgreich gelöscht"
-    });
-    res.status(204);
+    res.send("204 Kunde " + kundeID + " erfolgreich gelöscht").status(204);
 })
 
 
@@ -241,23 +238,43 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
 
-        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-        saveData();
+        if(resultAldiServer === "error") {
+            res.send("Server nicht erreichbar").status(444);
+            return;
+        }
+            newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+            saveData();
+
+            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
+            setTimeout(function () {
+                sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+                res.status(201).json({
+                    newEinkaufsliste: newEinkaufsliste
+                })
+            }, 1000);
+
     })
 
     requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
 
-        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-        saveData();
+        if(resultFakeServer === "error") {
+            res.send("Server nicht erreichbar").status(444);
+            return;
+        }
+
+            newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+            saveData();
+
+            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
+            setTimeout(function () {
+                sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+                res.status(201).json({
+                    newEinkaufsliste: newEinkaufsliste
+                })
+            }, 1000);
+
     })
 
-    //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
-    setTimeout(function () {
-        sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
-        res.status(201).json({
-            newEinkaufsliste: newEinkaufsliste
-        })
-    }, 1000);
 })
 
 
@@ -289,10 +306,7 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
             currentKunde.einkaufslisten.splice(i, 1);
             saveData();
 
-            res.json({
-                message: "204 Einkaufsliste " + einkaufslisteID + " von Kunde " + kundeID + " erfolgreich gelöscht"
-            });
-            res.status(204);
+            res.send("204 Einkaufsliste " + einkaufslisteID + " von Kunde " + kundeID + " erfolgreich gelöscht").status(204);
         }
     }
 })
@@ -315,10 +329,7 @@ router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
     currentKunde.einkaufslisten.splice(0, currentKunde.einkaufslisten.length);
     saveData();
 
-    res.json({
-        message: "204 Alle Einkaufslisten von Kunde " + kundeID + " erfolgreich gelöscht"
-    });
-    res.status(204);
+    res.send("204 Alle Einkaufslisten von Kunde " + kundeID + " erfolgreich gelöscht").status(204);
 })
 
 
@@ -352,23 +363,41 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     requestAldiServer(kundeUndEinkaufsliste.produkte, function (resultAldiServer) {
 
-        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-        saveData();
+        if(resultAldiServer === "error") {
+            res.send("Server nicht erreichbar").status(444);
+            return;
+        }
+            kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+            saveData();
+
+            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
+            setTimeout(function () {
+                sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
+                res.status(200).json({
+                    Einkaufsliste: kundeUndEinkaufsliste
+                })
+            }, 1000);
+
     })
 
     requestFakeServer(kundeUndEinkaufsliste.produkte, function (resultFakeServer) {
 
-        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-        saveData();
-    })
+        if(resultFakeServer === "error") {
+            res.send("Server nicht erreichbar").status(444);
+            return;
+        }
+            kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+            saveData();
 
-    //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
-    setTimeout(function () {
-        sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
-        res.status(200).json({
-            Einkaufsliste: kundeUndEinkaufsliste
-        })
-    }, 1000);
+            //Timeout, um der asynchronen Kommunikation von Javascript entgegenzuwirken
+            setTimeout(function () {
+                sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
+                res.status(200).json({
+                    Einkaufsliste: kundeUndEinkaufsliste
+                })
+            }, 1000);
+
+    })
 
     /*res.status(200).json({
         changedEinkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
@@ -537,7 +566,7 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
         method: "GET"
     };
 
-    http.request(options, function (res2) {
+    var request = http.request(options, function (res2) {
 
         var body = "";
 
@@ -551,7 +580,15 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
             callback(produkteArray);
         });
 
-    }).end();
+    });
+
+    //Server konnte nicht erreicht werden
+    request.on("error", function (err) {
+        callback("error");
+        console.log("error gefangen");
+    });
+
+    request.end();
 }
 
 const requestAldiServer = function (kundenEinkaufsliste, callback) {
@@ -564,7 +601,7 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
         method: "GET"
     };
 
-    http.request(options, function (res2) {
+    var request = http.request(options, function (res2) {
 
         var body = "";
 
@@ -577,7 +614,17 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
             produkteArray = findProdukteByName("Aldi", aldiSortiment, kundenEinkaufsliste);
             callback(produkteArray);
         });
-    }).end();
+
+    });
+
+    //Server konnte nicht erreicht werden
+    request.on("error", function (err) {
+        callback("error");
+        console.log("error gefangen");
+    });
+
+    request.end();
+
 }
 
 module.exports = router;

@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8d27ca1-9709-4764-bc7a-e66d81edd07f" name="Default Changelist" comment="Dateinamen umbenannt; DELETE Response überarbeitet">
+    <list default="true" id="b8d27ca1-9709-4764-bc7a-e66d81edd07f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aldiServer/aldiApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/aldiServer/aldiApp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aldiServer/aldiSortiment.json" beforeDir="false" afterPath="$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aldiServer/api/resources/aldiDiscounter.js" beforeDir="false" afterPath="$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/resources/kunde.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/resources/kunde.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fakeServer/api/resources/discounter.js" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/api/resources/sortiment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fakeServer/fakeApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/fakeApp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fakeServer/sortiment.json" beforeDir="false" afterPath="$PROJECT_DIR$/fakeServer/sortimentDatenbank.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kundenDatenbank.json" beforeDir="false" afterPath="$PROJECT_DIR$/kundenDatenbank.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -24,19 +18,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
+              <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -50,7 +35,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/aldiServer/aldiApp.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
@@ -74,17 +59,17 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/server.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="1" selection-start-column="1" selection-end-column="1" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -96,21 +81,31 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-237">
-              <caret line="549" column="107" selection-start-line="549" selection-start-column="107" selection-end-line="549" selection-end-column="107" />
+            <state relative-caret-position="3917">
+              <caret line="587" column="38" selection-start-line="587" selection-start-column="38" selection-end-line="587" selection-end-column="38" />
               <folding>
                 <element signature="e#407#1100#0" />
                 <element signature="e#1214#1286#0" />
                 <element signature="e#1446#1785#0" />
                 <element signature="e#1959#2543#0" />
-                <element signature="e#2704#3219#0" />
-                <element signature="e#3425#3868#0" />
-                <element signature="e#4098#4464#0" />
-                <element signature="e#7707#9203#0" />
+                <element signature="e#2704#3252#0" />
+                <element signature="e#3454#3897#0" />
+                <element signature="e#4127#4493#0" />
+                <element signature="e#6373#7176#0" />
+                <element signature="e#7241#7780#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="1" selection-start-column="1" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -136,11 +131,11 @@
         <option value="$PROJECT_DIR$/fakeServer/api/resources/discounter.js" />
         <option value="$PROJECT_DIR$/fakeServer/sortiment.json" />
         <option value="$PROJECT_DIR$/fakeServer/api/resources/sortiment.js" />
-        <option value="$PROJECT_DIR$/kundenDatenbank.json" />
-        <option value="$PROJECT_DIR$/api/resources/kunde.js" />
         <option value="$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js" />
         <option value="$PROJECT_DIR$/fakeServer/fakeApp.js" />
         <option value="$PROJECT_DIR$/aldiServer/aldiApp.js" />
+        <option value="$PROJECT_DIR$/kundenDatenbank.json" />
+        <option value="$PROJECT_DIR$/api/resources/kunde.js" />
       </list>
     </option>
   </component>
@@ -154,7 +149,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -165,36 +159,11 @@
             <path>
               <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
               <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
-              <item name="aldiServer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
-              <item name="aldiServer" type="462c0819:PsiDirectoryNode" />
               <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
               <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
-              <item name="aldiServer" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
-              <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
-              <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="GDWWS1819" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GDWWS1819" type="462c0819:PsiDirectoryNode" />
-              <item name="fakeServer" type="462c0819:PsiDirectoryNode" />
               <item name="api" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -202,6 +171,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -258,7 +228,8 @@
       <workItem from="1548266037085" duration="731000" />
       <workItem from="1548317373554" duration="2421000" />
       <workItem from="1548337053494" duration="2320000" />
-      <workItem from="1548598163701" duration="4212000" />
+      <workItem from="1548598163701" duration="5255000" />
+      <workItem from="1548605649322" duration="4425000" />
     </task>
     <task id="LOCAL-00001" summary="Einkaufsliste kann nun hinzugefügt werden und bestimmtem Kunden zugeordnet werden.&#10;Kunde besteht nun zusätzlich aus einem Array für die Einkaufslisten">
       <created>1546896856027</created>
@@ -309,14 +280,22 @@
       <option name="project" value="LOCAL" />
       <updated>1548319208446</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Dateinamen umbenannt; DELETE Response überarbeitet">
+      <created>1548602802695</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1548602802695</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51967000" />
+    <option name="totallyTimeSpent" value="57435000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18968935" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -332,7 +311,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3286119" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.36827195" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.3286119" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -368,13 +347,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/fakeServer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -389,15 +361,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
+    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="1" selection-start-column="1" selection-end-column="1" />
+        <state relative-caret-position="306">
+          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/api/resources/sortiment.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -406,29 +382,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
+    <entry file="file://$PROJECT_DIR$/aldiServer/aldiApp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="16" />
+        <state relative-caret-position="306">
+          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-237">
-          <caret line="549" column="107" selection-start-line="549" selection-start-column="107" selection-end-line="549" selection-end-column="107" />
-          <folding>
-            <element signature="e#407#1100#0" />
-            <element signature="e#1214#1286#0" />
-            <element signature="e#1446#1785#0" />
-            <element signature="e#1959#2543#0" />
-            <element signature="e#2704#3219#0" />
-            <element signature="e#3425#3868#0" />
-            <element signature="e#4098#4464#0" />
-            <element signature="e#7707#9203#0" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/aldiServer/aldiServer.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aldiServer/aldiSortimentDatenbank.json">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/fakeServer/sortimentDatenbank.json">
       <provider selected="true" editor-type-id="text-editor">
@@ -437,8 +402,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/aldiServer/aldiServer.js">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/aldiServer/api/resources/aldiSortiment.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -447,17 +416,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fakeServer/fakeApp.js">
+    <entry file="file://$PROJECT_DIR$/kundenDatenbank.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
+        <state>
+          <caret column="1" selection-start-column="1" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/aldiServer/aldiApp.js">
+    <entry file="file://$PROJECT_DIR$/api/resources/kunde.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
+        <state relative-caret-position="3917">
+          <caret line="587" column="38" selection-start-line="587" selection-start-column="38" selection-end-line="587" selection-end-column="38" />
+          <folding>
+            <element signature="e#407#1100#0" />
+            <element signature="e#1214#1286#0" />
+            <element signature="e#1446#1785#0" />
+            <element signature="e#1959#2543#0" />
+            <element signature="e#2704#3252#0" />
+            <element signature="e#3454#3897#0" />
+            <element signature="e#4127#4493#0" />
+            <element signature="e#6373#7176#0" />
+            <element signature="e#7241#7780#0" />
+          </folding>
         </state>
       </provider>
     </entry>
