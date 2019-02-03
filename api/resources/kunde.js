@@ -172,13 +172,12 @@ router.get("/:kundeID/einkaufsliste", (req, res, next) => {
             message: "404 Not Found",
             problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
         })
-
-    } else {
-
-        res.status(200).json({
-            einkaufslisten: findKundeByID(kundeID).einkaufslisten
-        })
+        return;
     }
+
+    res.status(200).json({
+        einkaufslisten: findKundeByID(kundeID).einkaufslisten
+    })
 })
 
 /*
@@ -208,36 +207,48 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const currentKunde = findKundeByID(kundeID);
     const newId = generateNewID(currentKunde.einkaufslisten)
-    const kundenEinkaufsliste = req.body.produkte;
+    // const kundenEinkaufsliste = req.body.produkte;
 
     const newEinkaufsliste = {
         uri: ourUri + req.originalUrl + "/" + newId,
         id: newId,
-        produkte: kundenEinkaufsliste,
-        einkaufslisteBeiDiscounter: []
+        produkte: req.body.produkte
     }
 
     currentKunde.einkaufslisten.push(newEinkaufsliste);
     saveData();
 
-    requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
-        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-        saveData();
+    // requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
+    //     newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+    //     saveData();
 
-    })
+    // })
 
-    requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
-        newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-        saveData();
-    })
+    // requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
+    //     newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+    //     saveData();
+    // })
 
+
+    // // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
+    // // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
+    // setTimeout(function () {
+    //     sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+    //     res.status(201).json({
+    //         newEinkaufsliste: newEinkaufsliste
+    //     })
+    // }, 1000);
+
+    // requestEinkaufsliste(newEinkaufsliste, res, req.body.produkte);
+
+    updateEinkaufsliste(newEinkaufsliste);
 
     // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
     // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
     setTimeout(function () {
         sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
         res.status(201).json({
-            newEinkaufsliste: newEinkaufsliste
+            einkaufsliste: newEinkaufsliste
         })
     }, 1000);
 })
@@ -298,7 +309,7 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
-    const kundeUndEinkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
+    const einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
     if (req.body.produkte == undefined) {
         res.status(400).json({
@@ -307,7 +318,7 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
         })
         return;
     }
-    if (!kundeUndEinkaufsliste) {
+    if (!einkaufsliste) {
 
         res.status(404).json({
             message: "404 Not Found",
@@ -316,30 +327,15 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
         return;
     }
 
-    kundeUndEinkaufsliste.produkte = req.body.produkte;
-    saveData();
+    einkaufsliste.produkte = req.body.produkte;
+    updateEinkaufsliste(einkaufsliste);
 
-    kundeUndEinkaufsliste.einkaufslisteBeiDiscounter = [];
-
-    requestAldiServer(kundeUndEinkaufsliste.produkte, function (resultAldiServer) {
-        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-        saveData();
-    })
-
-    requestFakeServer(kundeUndEinkaufsliste.produkte, function (resultFakeServer) {
-        kundeUndEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-        saveData();
-    })
-
-    // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
-    // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
     setTimeout(function () {
-        sortEinkaufslisteBeiDiscounter(kundeUndEinkaufsliste);
+        sortEinkaufslisteBeiDiscounter(einkaufsliste);
         res.status(200).json({
-            einkaufsliste: kundeUndEinkaufsliste
+            einkaufsliste: einkaufsliste
         })
     }, 1000);
-
 })
 
 // HILFS FUNKTIONEN
@@ -434,8 +430,7 @@ const findKundeByID = function (id) {
     return false;
 }
 
-
-// Finden Einkaufsliste in der kundenListe, anhand der angegebenen kundenID und der angegebenen einkaufslistenID
+// Findet Einkaufsliste in der kundenListe, anhand der angegebenen kundenID und der angegebenen einkaufslistenID
 const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 
     const currentKunde = findKundeByID(kundeID);
@@ -451,11 +446,12 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
     return false;
 }
 
-// Findet Produkt in einem Array, anhand des angegebenen Namens
+// Findet Produkte in dem Sortiment des Discounters anhand der angegeben Produkte des Kunden und gibt die Einkaufsliste zurück
 const findProdukteByName = function (discounterName, discounterProdukte, kundeProdukte) {
 
     var gesamtPreis = 0;
     var produktListe = new Array();
+
     for (let i = 0; i < discounterProdukte.length; i++) {
 
         for (let j = 0; j < kundeProdukte.length; j++)
@@ -476,6 +472,7 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
     var einkaufsliste = {
         name: discounterName,
         gesamtPreis: gesamtPreis.toFixed(2),
+        anzahlNichtGefundenerProdukte: kundeProdukte.length - produktListe.length,
         produktListe: produktListe
     };
     return einkaufsliste;
@@ -483,6 +480,44 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
 
 // REQUESTS AN UNERE SERVER
 
+const requestEinkaufsliste = function (einkaufsliste, res, produkte) {
+
+    einkaufsliste.einkaufslisteBeiDiscounter = [];
+
+    requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
+        einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+        saveData();
+    })
+
+    requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
+        einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+        saveData();
+    })
+
+    // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
+    // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
+    setTimeout(function () {
+        sortEinkaufslisteBeiDiscounter(einkaufsliste);
+        res.status(200).json({
+            einkaufsliste: einkaufsliste
+        })
+    }, 1000);
+}
+
+const updateEinkaufsliste = function (einkaufsliste) {
+
+    einkaufsliste.einkaufslisteBeiDiscounter = [];
+
+    requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
+        einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+        saveData();
+    })
+
+    requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
+        einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+        saveData();
+    })
+}
 
 const requestFakeServer = function (kundenEinkaufsliste, callback) {
     // Notwendige Informtionen, um Server per http.request anzusprechen
@@ -536,6 +571,8 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
         });
 
         res2.on("end", function () {
+
+            console.log("LOLOLOLOL " + kundenEinkaufsliste);
             const aldiSortiment = JSON.parse(body).AldiSortiment;
             produkteArray = findProdukteByName("Aldi", aldiSortiment, kundenEinkaufsliste);
             callback(produkteArray);
