@@ -218,29 +218,6 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     currentKunde.einkaufslisten.push(newEinkaufsliste);
     saveData();
 
-    // requestAldiServer(kundenEinkaufsliste, function (resultAldiServer) {
-    //     newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-    //     saveData();
-
-    // })
-
-    // requestFakeServer(kundenEinkaufsliste, function (resultFakeServer) {
-    //     newEinkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-    //     saveData();
-    // })
-
-
-    // // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
-    // // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
-    // setTimeout(function () {
-    //     sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
-    //     res.status(201).json({
-    //         newEinkaufsliste: newEinkaufsliste
-    //     })
-    // }, 1000);
-
-    // requestEinkaufsliste(newEinkaufsliste, res, req.body.produkte);
-
     updateEinkaufsliste(newEinkaufsliste);
 
     // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
@@ -452,11 +429,16 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
     var gesamtPreis = 0;
     var produktListe = new Array();
 
+    // Es wird jedes Produkt aus dem Sortiment des Discounters durchgegangen
     for (let i = 0; i < discounterProdukte.length; i++) {
 
+        // Es wird jedes Produkt aus der Einkaufsliste des Kunden durchgegangen
         for (let j = 0; j < kundeProdukte.length; j++)
 
-            if (discounterProdukte[i].name == kundeProdukte[j]) {
+            // Wenn das ite Produkt aus dem Sortiment mit dem jten Produkt aus der Einkaufsliste des Kunden übereinstimmt
+            // wird ein neues Produkt erstellt und dem Array produktListe hinzugefügt
+            // In produktListe sind Informationen über die Produkte des Kunden bei dem jeweiligen Discounter drin
+            if (discounterProdukte[i].name.toUpperCase() == kundeProdukte[j].toUpperCase()) {
 
                 const newProdukt = {
                     name: discounterProdukte[i].name,
@@ -480,39 +462,16 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
 
 // REQUESTS AN UNERE SERVER
 
-const requestEinkaufsliste = function (einkaufsliste, res, produkte) {
-
-    einkaufsliste.einkaufslisteBeiDiscounter = [];
-
-    requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
-        einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-        saveData();
-    })
-
-    requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
-        einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
-        saveData();
-    })
-
-    // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
-    // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
-    setTimeout(function () {
-        sortEinkaufslisteBeiDiscounter(einkaufsliste);
-        res.status(200).json({
-            einkaufsliste: einkaufsliste
-        })
-    }, 1000);
-}
-
 const updateEinkaufsliste = function (einkaufsliste) {
 
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
+    // Es wird ein request an den Aldi Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
         saveData();
     })
-
+    // Es wird ein request an den Fake Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
         saveData();
