@@ -4,55 +4,63 @@
         "name": "Apfel",
         "marke": "Pink Lady",
         "preis": 3.00,
-        "gramm": 10
+        "gramm": 10,
+        "bio": true
     },
     {
         "id": 1,
         "name": "Weißbrot",
         "marke": "Sammy's Sandwich",
         "preis": 1.10,
-        "gramm": 40
+        "gramm": 40,
+        "bio": true
     },
     {
         "id": 2,
         "name": "Duplo",
         "marke": "Kinder",
         "preis": 1.60,
-        "gramm": 75
+        "gramm": 75,
+        "bio": true
     },
     {
         "id": 1,
         "name": "Fischstäbchen",
         "marke": "Iglo",
         "preis": 2.49,
-        "gramm": 150
+        "gramm": 150,
+        "bio": false
     },
     {
         "id": 4,
         "name": "Pick Up",
         "marke": "Leibniz",
         "preis": 0.89,
-        "gramm": 50
+        "gramm": 50,
+        "bio": true
     },
     {
         "id": 5,
         "name": "Curry King XXL",
         "marke": "Meica",
         "preis": 0.10,
-        "gramm": 120
+        "gramm": 120,
+        "bio": false
     },
     {
         "id": 6,
         "name": "Paprika Chips",
         "marke": "Chio",
         "preis": 1.40,
-        "gramm": 33
+        "gramm": 33,
+        "bio": false
     },
     {
         "id": 5,
         "name": "Paniermehl",
         "marke": "fleur",
         "preis": 1.19,
-        "gramm": 300
+        "gramm": 300,
+        "bio": true
     }
 ]

@@ -209,7 +209,7 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     const newId = generateNewID(currentKunde.einkaufslisten)
     // const kundenEinkaufsliste = req.body.produkte;
 
-    const newEinkaufsliste = {
+    var newEinkaufsliste = {
         uri: ourUri + req.originalUrl + "/" + newId,
         id: newId,
         produkte: req.body.produkte
@@ -218,7 +218,7 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     currentKunde.einkaufslisten.push(newEinkaufsliste);
     saveData();
 
-    updateEinkaufsliste(newEinkaufsliste);
+    updateEinkaufsliste(newEinkaufsliste, req.query);
 
     // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
     // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
@@ -427,7 +427,7 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 const findProdukteByName = function (discounterName, discounterProdukte, kundeProdukte) {
 
     var gesamtPreis = 0;
-    var produktListe = new Array();
+    var produkte = new Array();
 
     // Es wird jedes Produkt aus dem Sortiment des Discounters durchgegangen
     for (let i = 0; i < discounterProdukte.length; i++) {
@@ -444,9 +444,10 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
                     name: discounterProdukte[i].name,
                     marke: discounterProdukte[i].marke,
                     preis: discounterProdukte[i].preis,
-                    gewicht: discounterProdukte[i].gramm
+                    gewicht: discounterProdukte[i].gramm,
+                    bio: discounterProdukte[i].bio
                 }
-                produktListe.push(newProdukt);
+                produkte.push(newProdukt);
                 gesamtPreis += discounterProdukte[i].preis
             }
     }
@@ -454,25 +455,65 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
     var einkaufsliste = {
         name: discounterName,
         gesamtPreis: gesamtPreis.toFixed(2),
-        anzahlNichtGefundenerProdukte: kundeProdukte.length - produktListe.length,
-        produktListe: produktListe
+        anzahlNichtGefundenerProdukte: kundeProdukte.length - produkte.length,
+        produkte: produkte
     };
+
+    return einkaufsliste;
+}
+
+// Filter-Funktionen für QUERIES
+
+/*
+ * filterBio kommt zum Einsatz, wenn im query allBio=true steht
+ * Die Methode nimmt eine Einkaufsliste entgegen und schaut für jedes Produkt, ob das Attribut bio
+ * für dieses auf true steht
+ */
+const filterBio = function (einkaufsliste) {
+
+    var bioProdukte = new Array();
+    var gesamtPreis = 0;
+    const anzahlNichtGefundenerProdukte = einkaufsliste.anzahlNichtGefundenerProdukte;
+    const produkte = einkaufsliste.produkte;
+
+    for (let i = 0; i < produkte.length; i++) {
+        console.log(produkte[i]);
+        if (produkte[i].bio) {
+            bioProdukte.push(produkte[i]);
+            gesamtPreis += produkte[i].preis;
+        }
+    }
+
+    einkaufsliste.gesamtPreis = gesamtPreis.toFixed(2);
+    einkaufsliste.anzahlNichtGefundenerProdukte = anzahlNichtGefundenerProdukte + (einkaufsliste.produkte.length - bioProdukte.length);
+    einkaufsliste.produkte = bioProdukte;
+
     return einkaufsliste;
 }
 
 // REQUESTS AN UNERE SERVER
 
-const updateEinkaufsliste = function (einkaufsliste) {
+const updateEinkaufsliste = function (einkaufsliste, query) {
 
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
     // Es wird ein request an den Aldi Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
+        
+        // Wird im query allBio=true übergeben wird die Einkaufsliste ein weiteres mal gefiltert, sodass sich
+        // nur noch Bio-Produkte darin befinden
+        if(query.allBio) resultAldiServer = filterBio(resultAldiServer);
+        
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
         saveData();
     })
     // Es wird ein request an den Fake Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
+
+        // Wird im query allBio=true übergeben wird die Einkaufsliste ein weiteres mal gefiltert, sodass sich
+        // nur noch Bio-Produkte darin befinden
+        if(query.allBio) resultFakeServer = filterBio(resultFakeServer);
+
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
         saveData();
     })
@@ -530,8 +571,6 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
         });
 
         res2.on("end", function () {
-
-            console.log("LOLOLOLOL " + kundenEinkaufsliste);
             const aldiSortiment = JSON.parse(body).AldiSortiment;
             produkteArray = findProdukteByName("Aldi", aldiSortiment, kundenEinkaufsliste);
             callback(produkteArray);
