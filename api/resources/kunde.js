@@ -143,8 +143,9 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
+    var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
-    if (!findEinkaufslisteByID(kundeID, einkaufslisteID)) {
+    if (!einkaufsliste) {
 
         res.status(404).json({
             message: "404 Not Found",
@@ -153,8 +154,23 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
         return;
     }
 
-    res.status(200).json({
-        einkaufsliste: findEinkaufslisteByID(kundeID, einkaufslisteID)
+    updateEinkaufsliste(einkaufsliste, function () {
+
+        sortEinkaufslisteBeiDiscounter(einkaufsliste);
+        saveData();
+
+        if (req.query.allBio) {
+
+            // Wird im query allBio=true übergeben, so wird die Einkaufsliste für die jeweiligen Dscounter nach Bio-Produkten
+            // gefiltert. Die Einkaufsliste an sich wird NICHT verändert, sie wird nur gefiltert ausgegeben.
+            res.status(200).json({
+                einkaufsliste: filterBio(einkaufsliste)
+            })
+        } else {
+            res.status(200).json({
+                einkaufsliste: einkaufsliste
+            })
+        }
     })
 })
 
@@ -212,22 +228,26 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     var newEinkaufsliste = {
         uri: ourUri + req.originalUrl + "/" + newId,
         id: newId,
-        produkte: req.body.produkte
+        produkte: req.body.produkte,
+        einkaufslisteBeiDiscounter: []
     }
 
     currentKunde.einkaufslisten.push(newEinkaufsliste);
     saveData();
 
-    updateEinkaufsliste(newEinkaufsliste, req.query);
+    // Die Methode updateEinkaufsliste wird ausgeführt
+    // Die neue Einkaufsliste wird übergeben und dazu noch eine callback-Funktion, die ausgeführt wird,
+    updateEinkaufsliste(newEinkaufsliste, function (newEinkaufsliste) {
 
-    // Nach einer Sekunde wird der Status 201 - CREATED gesendet, in dieser Zeit werden die Requests abgearbeitet
-    // Daten von Requests, die länger brauchen oder fehlerhaft sind werden nicht ausgewertet
-    setTimeout(function () {
+        // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
+        if (req.query.allBio) newEInkaufsliste = filterBio(newEinkaufsliste);
+
         sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+        saveData();
         res.status(201).json({
             einkaufsliste: newEinkaufsliste
-        })
-    }, 1000);
+        });
+    })
 })
 
 /*
@@ -265,7 +285,6 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 router.delete('/:kundeID/einkaufsliste', (req, res, next) => {
 
     const kundeID = req.params.kundeID;
-
     const currentKunde = findKundeByID(kundeID);
 
     if (!findKundeByID(kundeID)) {
@@ -286,7 +305,7 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
-    const einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
+    var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
     if (req.body.produkte == undefined) {
         res.status(400).json({
@@ -305,14 +324,18 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     }
 
     einkaufsliste.produkte = req.body.produkte;
-    updateEinkaufsliste(einkaufsliste);
 
-    setTimeout(function () {
+    updateEinkaufsliste(einkaufsliste, function () {
+
+        // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
+        if (req.query.allBio) einkaufsliste = filterBio(einkaufsliste);
+
         sortEinkaufslisteBeiDiscounter(einkaufsliste);
+        saveData();
         res.status(200).json({
-            einkaufsliste: einkaufsliste
+            changedEinkaufsliste: einkaufsliste
         })
-    }, 1000);
+    });
 })
 
 // HILFS FUNKTIONEN
@@ -468,55 +491,62 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
  * filterBio kommt zum Einsatz, wenn im query allBio=true steht
  * Die Methode nimmt eine Einkaufsliste entgegen und schaut für jedes Produkt, ob das Attribut bio
  * für dieses auf true steht
+ * Anschließend wird die gefilterte Einkaufsliste zurückgegeben
  */
 const filterBio = function (einkaufsliste) {
 
-    var bioProdukte = new Array();
-    var gesamtPreis = 0;
-    const anzahlNichtGefundenerProdukte = einkaufsliste.anzahlNichtGefundenerProdukte;
-    const produkte = einkaufsliste.produkte;
+    for (let j = 0; j < einkaufsliste.einkaufslisteBeiDiscounter.length; j++) {
 
-    for (let i = 0; i < produkte.length; i++) {
-        console.log(produkte[i]);
-        if (produkte[i].bio) {
-            bioProdukte.push(produkte[i]);
-            gesamtPreis += produkte[i].preis;
+        var bioProdukte = new Array();
+        var gesamtPreis = 0;
+        const anzahlNichtGefundenerProdukte = einkaufsliste.einkaufslisteBeiDiscounter[j].anzahlNichtGefundenerProdukte;
+        const produkte = einkaufsliste.einkaufslisteBeiDiscounter[j].produkte;
+
+        for (let i = 0; i < produkte.length; i++) {
+            console.log(produkte[i]);
+            if (produkte[i].bio) {
+                bioProdukte.push(produkte[i]);
+                gesamtPreis += produkte[i].preis;
+            }
         }
+        einkaufsliste.einkaufslisteBeiDiscounter[j].gesamtPreis = gesamtPreis.toFixed(2);
+        einkaufsliste.einkaufslisteBeiDiscounter[j].anzahlNichtGefundenerProdukte = anzahlNichtGefundenerProdukte + (einkaufsliste.produkte.length - bioProdukte.length);
+        einkaufsliste.einkaufslisteBeiDiscounter[j].produkte = bioProdukte;
     }
-
-    einkaufsliste.gesamtPreis = gesamtPreis.toFixed(2);
-    einkaufsliste.anzahlNichtGefundenerProdukte = anzahlNichtGefundenerProdukte + (einkaufsliste.produkte.length - bioProdukte.length);
-    einkaufsliste.produkte = bioProdukte;
-
     return einkaufsliste;
 }
 
 // REQUESTS AN UNERE SERVER
 
-const updateEinkaufsliste = function (einkaufsliste, query) {
+/*
+ * updateEinkaufsliste nimmt eine Einkaufsliste und eine Callback-Funktion entgegen
+ * Zuerst werden Requests an die Server der Discounter geschickt und das Attribut einkaufsliste.einkaufslisteBeiDiscounter
+ * für jeden angefragten Discounter entsprechend verändert
+ * Der Callback wird nach einer Sekunde ausgeführt und diesem wird die veränderte Einkaufsliste wieder mitgegeben,so wird
+ * sichergestellt, dass der jeweilige Header erst nach den Requests gesetzt wird
+ */
+const updateEinkaufsliste = function (einkaufsliste, callback) {
 
+    // Enthält die Einkaufsliste des Kunden bei den jeweiligen Discountern
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
     // Es wird ein request an den Aldi Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
-        
-        // Wird im query allBio=true übergeben wird die Einkaufsliste ein weiteres mal gefiltert, sodass sich
-        // nur noch Bio-Produkte darin befinden
-        if(query.allBio) resultAldiServer = filterBio(resultAldiServer);
-        
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
         saveData();
     })
     // Es wird ein request an den Fake Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
-
-        // Wird im query allBio=true übergeben wird die Einkaufsliste ein weiteres mal gefiltert, sodass sich
-        // nur noch Bio-Produkte darin befinden
-        if(query.allBio) resultFakeServer = filterBio(resultFakeServer);
-
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
         saveData();
     })
+
+    // Eine Sekunde lang haben die Requests Zeit bearbeitet zu werden
+    // Durch den Timer wird sichergestellt, dass fehlerhafte oder zu lange dauernde Requests das Ergebnis für den Nutzer
+    // nicht hinauszögern
+    setTimeout(function () {
+        callback(einkaufsliste);
+    }, 1000);
 }
 
 const requestFakeServer = function (kundenEinkaufsliste, callback) {
