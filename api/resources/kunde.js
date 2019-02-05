@@ -567,8 +567,8 @@ const requestFakeServer = function (kundenEinkaufsliste, callback) {
         });
 
         res2.on("end", function () {
-            const sortiment = JSON.parse(body);
-            produkteArray = findProdukteByName("Fake Server", sortiment['Sortiment'], kundenEinkaufsliste);
+            const sortiment = JSON.parse(body).sortiment;
+            produkteArray = findProdukteByName("Lidl", sortiment, kundenEinkaufsliste);
             callback(produkteArray);
         });
 
@@ -588,7 +588,7 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
     const options = {
         host: "localhost",
         port: 3070,
-        path: "/aldiSortiment",
+        path: "/sortiment",
         method: "GET"
     };
 
@@ -601,8 +601,8 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
         });
 
         res2.on("end", function () {
-            const aldiSortiment = JSON.parse(body).AldiSortiment;
-            produkteArray = findProdukteByName("Aldi", aldiSortiment, kundenEinkaufsliste);
+            const sortiment = JSON.parse(body).sortiment;
+            produkteArray = findProdukteByName("Aldi", sortiment, kundenEinkaufsliste);
             callback(produkteArray);
         });
 

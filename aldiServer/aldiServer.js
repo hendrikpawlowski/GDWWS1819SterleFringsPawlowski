@@ -7,4 +7,4 @@ const server = http.createServer(aldiApp);
 
 server.listen(port);
 
-console.log("Server joggt gemütlich...");
+console.log("Server joggt gemütlich...\nPort: " + port);

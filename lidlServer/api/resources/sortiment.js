@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const sortimentDatenbank = require('../../sortimentDatenbank');
+const sortiment = require('../../sortimentDatenbank');
 
 
 router.get("/",(req,res,next) => {
 
     res.status(200).json({
-        Sortiment: sortimentDatenbank
+        sortiment: sortiment
     });
 });
 
@@ -30,11 +30,11 @@ router.get("/:artikelID",(req,res,next) => {
 
 const findArtikelByID = function (id) {
 
-    for (let i = 0; i < sortimentDatenbank.length; i++) {
+    for (let i = 0; i < sortiment.length; i++) {
 
-        if (sortimentDatenbank[i].id == id) {
+        if (sortiment[i].id == id) {
 
-            return sortimentDatenbank[i];
+            return sortiment[i];
         }
     }
 

@@ -26,4 +26,4 @@ fakeapp.use((error, req, res) => {
     })
 });
 
-module.exports = fakeapp;
+module.exports = lidlapp;

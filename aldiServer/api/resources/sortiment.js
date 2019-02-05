@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const aldiSortimentDatenbank = require('../../aldiSortimentDatenbank');
-
+const sortiment = require('../../sortimentDatenbank');
 
 router.get("/",(req,res) => {
 
     res.status(200).json({
-        AldiSortiment: aldiSortimentDatenbank
+        sortiment: sortiment
     });
 });
-
 
 router.get("/:artikelID",(req,res) => {
 
@@ -27,14 +25,15 @@ router.get("/:artikelID",(req,res) => {
     }
 });
 
+// Hilfsfunktionen
 
 const findArtikelByID = function (id) {
 
-    for (let i = 0; i < aldiSortimentDatenbank.length; i++) {
+    for (let i = 0; i < sortiment.length; i++) {
 
-        if (aldiSortimentDatenbank[i].id === id) {
+        if (sortiment[i].id === id) {
 
-            return aldiSortimentDatenbank[i];
+            return sortiment[i];
         }
     }
 
