@@ -3,7 +3,7 @@ const lidlApp = require('./lidlApp');
 
 const port = 3069;
 
-const server = http.createServer(fakeapp);
+const server = http.createServer(lidlApp);
 
 server.listen(port);
 

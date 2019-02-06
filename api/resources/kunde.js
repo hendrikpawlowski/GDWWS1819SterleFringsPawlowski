@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const http = require('http');
+const geolib = require('geolib');
 
 // Die lokale Kundendatenbank wird in einem Array in der Variable kundenListe gespeichert
 const kundenListe = require('../../kundenDatenbank');
@@ -50,7 +51,6 @@ router.post("/", (req, res, next) => {
  * Die Kundenliste wird zurückgegeben
  */
 router.get("/", (req, res, next) => {
-
     res.status(200).json({
         KundenListe: kundenListe
     });
@@ -143,7 +143,17 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
+    const standort = req.body.standort;
+
     var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
+
+    if (req.body.standort == undefined) {
+        res.status(400).json({
+            message: "Missing body in this PUT",
+            missing: "standort"
+        })
+        return
+    }
 
     if (!einkaufsliste) {
 
@@ -154,10 +164,7 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
         return;
     }
 
-    updateEinkaufsliste(einkaufsliste, function () {
-
-        sortEinkaufslisteBeiDiscounter(einkaufsliste);
-        saveData();
+    updateEinkaufsliste(einkaufsliste, standort, function () {
 
         if (req.query.allBio) {
 
@@ -165,6 +172,13 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
             // gefiltert. Die Einkaufsliste an sich wird NICHT verändert, sie wird nur gefiltert ausgegeben.
             res.status(200).json({
                 einkaufsliste: filterBio(einkaufsliste)
+            })
+        } else if (req.query.location){
+
+            // Wird im query location=true übergeben, so werden die Einkaufslisten für die jeweiligen Discounter nach der Distanz zum
+            // Kunden sortiert (geringste Distanz als erstes).
+            res.status(200).json({
+                einkaufsliste: filterLocation(einkaufsliste)
             })
         } else {
             res.status(200).json({
@@ -203,12 +217,29 @@ router.get("/:kundeID/einkaufsliste", (req, res, next) => {
 router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
+    const standort = req.body.standort;
+
+    if (req.body.standort == undefined) {
+        res.status(400).json({
+            message: "Missing body in this PUT",
+            missing: "standort"
+        })
+        return
+    }
 
     if (req.body.produkte == undefined) {
 
         res.status(400).json({
             message: "Missing body in this POST",
             missing: "produkte"
+        })
+        return;
+    }
+    if (req.body.standort == undefined) {
+
+        res.status(400).json({
+            message: "Missing body in this POST",
+            missing: "standort"
         })
         return;
     }
@@ -237,12 +268,20 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     // Die Methode updateEinkaufsliste wird ausgeführt
     // Die neue Einkaufsliste wird übergeben und dazu noch eine callback-Funktion, die ausgeführt wird,
-    updateEinkaufsliste(newEinkaufsliste, function (newEinkaufsliste) {
+    updateEinkaufsliste(newEinkaufsliste, standort, function (newEinkaufsliste) {
 
         // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
-        if (req.query.allBio) newEInkaufsliste = filterBio(newEinkaufsliste);
+        if (req.query.allBio) newEinkaufsliste = filterBio(newEinkaufsliste);
 
-        sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+        // Wenn im query location=true übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
+        // nach der Distanz sortiert (gerinste Distanz als erstes)
+        if (req.query.location) {
+            newEinkaufsliste = filterLocation(newEinkaufsliste)
+        } else {
+            // Wenn im query nichts übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
+            // nach dem Gesamtpreis sortiert (niedrigste Gesamtpreis als erstes)
+            sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+        }
         saveData();
         res.status(201).json({
             einkaufsliste: newEinkaufsliste
@@ -305,8 +344,16 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
+    const standort = req.body.standort;
     var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
+    if (req.body.standort == undefined) {
+        res.status(400).json({
+            message: "Missing body in this PUT",
+            missing: "standort"
+        })
+        return
+    }
     if (req.body.produkte == undefined) {
         res.status(400).json({
             message: "Missing body in this PUT",
@@ -325,12 +372,21 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
 
     einkaufsliste.produkte = req.body.produkte;
 
-    updateEinkaufsliste(einkaufsliste, function () {
+    updateEinkaufsliste(einkaufsliste, standort, function () {
 
         // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
         if (req.query.allBio) einkaufsliste = filterBio(einkaufsliste);
 
-        sortEinkaufslisteBeiDiscounter(einkaufsliste);
+        // Wenn im query location=true übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
+        // nach der Distanz sortiert (gerinste Distanz als erstes)
+        if (req.query.location) {
+            einkaufsliste = filterLocation(einkaufsliste)
+        } else {
+            // Wenn im query nichts übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
+            // nach dem Gesamtpreis sortiert (niedrigste Gesamtpreis als erstes)
+            sortEinkaufslisteBeiDiscounter(einkaufsliste);
+        }
+
         saveData();
         res.status(200).json({
             changedEinkaufsliste: einkaufsliste
@@ -399,7 +455,7 @@ const sortKundenListe = function () {
 };
 
 /*
- * sortEinkaufslisteBeiDiscounter ist dazu da die komplette KundenListe nach IDs zu sortieren
+ * sortEinkaufslisteBeiDiscounter ist dazu da die Einkaufslisten für den jeweiligen Discountern nach dem Gesamtpreis zu sortieren
  */
 const sortEinkaufslisteBeiDiscounter = function (currentEinkaufsliste) {
 
@@ -414,6 +470,7 @@ const sortEinkaufslisteBeiDiscounter = function (currentEinkaufsliste) {
         return 0;
     });
 };
+
 
 
 // Findet Kunden in der kundenListe, anhand der angegebenen ID
@@ -516,6 +573,29 @@ const filterBio = function (einkaufsliste) {
     return einkaufsliste;
 }
 
+/*
+ * filterLocation kommt zum Einsatz, wenn im query location=true steht
+ * es wird eine Einkaufsliste eines Kunden übergeben
+ * die Einkaufslisten für die jeweiligen Discounter dieser Einkaufsliste werden dann nach der Distanz
+ * zum Kunden sortiert
+ */
+
+const filterLocation = function (einkaufsliste) {
+    einkaufsliste.einkaufslisteBeiDiscounter.sort(function (a, b) {
+        if (a.Zusatzinformation.Distanz ) {
+            if (a.Zusatzinformation.Distanz > b.Zusatzinformation.Distanz) {
+                return 1;
+            }
+            if (a.Zusatzinformation.Distanz < b.Zusatzinformation.Distanz) {
+                return -1;
+            }
+            // a muss gleich b sein
+            return 0;
+        }
+    });
+    return einkaufsliste;
+}
+
 // REQUESTS AN UNERE SERVER
 
 /*
@@ -525,19 +605,31 @@ const filterBio = function (einkaufsliste) {
  * Der Callback wird nach einer Sekunde ausgeführt und diesem wird die veränderte Einkaufsliste wieder mitgegeben,so wird
  * sichergestellt, dass der jeweilige Header erst nach den Requests gesetzt wird
  */
-const updateEinkaufsliste = function (einkaufsliste, callback) {
+const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
 
     // Enthält die Einkaufsliste des Kunden bei den jeweiligen Discountern
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
     // Es wird ein request an den Aldi Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
+        // Es wird ein request an den Aldi Server mit einem anderen Path gesendet, um die Zusatzinformationen des Discounters
+        // der Einkaufsliste hinzuzufügen und die Distanz zwischen dem Kunden und des Discounters zu berechnen
+        requestAldiServerInformation(function (resultInformation) {
+            resultAldiServer.Zusatzinformation = resultInformation;
+            resultAldiServer.Zusatzinformation.Distanz = geolib.getDistance(resultAldiServer.Zusatzinformation.Standort, kundeStandort) / 1000 + " km";
+        })
         einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
         saveData();
     })
-    // Es wird ein request an den Fake Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
-    requestFakeServer(einkaufsliste.produkte, function (resultFakeServer) {
-        einkaufsliste.einkaufslisteBeiDiscounter.push(resultFakeServer);
+    // Es wird ein request an den Lidl Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
+    requestLidlServer(einkaufsliste.produkte, function (resultLidlServer) {
+        // Es wird ein request an den Lidl Server mit einem anderen Path gesendet, um die Zusatzinformationen des Discounters
+        // der Einkaufsliste hinzuzufügen und die Distanz zwischen dem Kunden und des Discounters zu berechnen
+        requestLidlServerInformation(function (resultInformation) {
+            resultLidlServer.Zusatzinformation = resultInformation;
+            resultLidlServer.Zusatzinformation.Distanz = geolib.getDistance(resultLidlServer.Zusatzinformation.Standort, kundeStandort) / 1000 + " km";
+        })
+        einkaufsliste.einkaufslisteBeiDiscounter.push(resultLidlServer);
         saveData();
     })
 
@@ -549,7 +641,7 @@ const updateEinkaufsliste = function (einkaufsliste, callback) {
     }, 1000);
 }
 
-const requestFakeServer = function (kundenEinkaufsliste, callback) {
+const requestLidlServer = function (kundenEinkaufsliste, callback) {
     // Notwendige Informtionen, um Server per http.request anzusprechen
     const options = {
         host: "localhost",
@@ -604,6 +696,74 @@ const requestAldiServer = function (kundenEinkaufsliste, callback) {
             const sortiment = JSON.parse(body).sortiment;
             produkteArray = findProdukteByName("Aldi", sortiment, kundenEinkaufsliste);
             callback(produkteArray);
+        });
+
+    });
+
+    // Server konnte nicht erreicht werden
+    request.on("error", function (err) {
+        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
+    });
+
+    request.end();
+
+}
+
+const requestAldiServerInformation = function (callback) {
+
+    // Notwendige Informtionen, um Server per http.request anzusprechen
+    const options = {
+        host: "localhost",
+        port: 3070,
+        path: "/sortiment/information",
+        method: "GET"
+    };
+
+    var request = http.request(options, function (res2) {
+
+        var body = "";
+
+        res2.on("data", function (content) {
+            body += content;
+        });
+
+        res2.on("end", function () {
+            const information = JSON.parse(body);
+            callback(information);
+        });
+
+    });
+
+    // Server konnte nicht erreicht werden
+    request.on("error", function (err) {
+        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
+    });
+
+    request.end();
+
+}
+
+const requestLidlServerInformation = function (callback) {
+
+    // Notwendige Informtionen, um Server per http.request anzusprechen
+    const options = {
+        host: "localhost",
+        port: 3069,
+        path: "/sortiment/information",
+        method: "GET"
+    };
+
+    var request = http.request(options, function (res2) {
+
+        var body = "";
+
+        res2.on("data", function (content) {
+            body += content;
+        });
+
+        res2.on("end", function () {
+            const information = JSON.parse(body);
+            callback(information);
         });
 
     });

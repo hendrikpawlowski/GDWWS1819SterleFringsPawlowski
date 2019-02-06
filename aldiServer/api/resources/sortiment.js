@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const sortiment = require('../../sortimentDatenbank');
 
+router.get("/information", (req,res) => {
+    res.status(200).json({
+        Standort: [50.9817728, 7.5306468],
+        Payback: false,
+        Kaffeautomat: true,
+        Pfandrueckgabe: ["PET", "Glas"]
+    })
+});
+
 router.get("/",(req,res) => {
 
     res.status(200).json({
