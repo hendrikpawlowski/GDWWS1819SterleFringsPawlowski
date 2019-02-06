@@ -144,12 +144,21 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
     const standort = req.body.standort;
+    const suchradius = req.body.suchradius;
 
     var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
+    if (req.body.suchradius == undefined) {
+        res.status(400).json({
+            message: "Missing body in this GET",
+            missing: "suchradius"
+        })
+        return
+    }
+
     if (req.body.standort == undefined) {
         res.status(400).json({
-            message: "Missing body in this PUT",
+            message: "Missing body in this GET",
             missing: "standort"
         })
         return
@@ -164,7 +173,7 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
         return;
     }
 
-    updateEinkaufsliste(einkaufsliste, standort, function () {
+    updateEinkaufsliste(einkaufsliste, suchradius, standort, function () {
 
         if (req.query.allBio) {
 
@@ -218,10 +227,19 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const standort = req.body.standort;
+    const suchradius = req.body.suchradius;
+
+    if (req.body.suchradius == undefined) {
+        res.status(400).json({
+            message: "Missing body in this POST",
+            missing: "suchradius"
+        })
+        return
+    }
 
     if (req.body.standort == undefined) {
         res.status(400).json({
-            message: "Missing body in this PUT",
+            message: "Missing body in this POST",
             missing: "standort"
         })
         return
@@ -345,8 +363,17 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
     const standort = req.body.standort;
+    const suchradius = req.body.suchradius;
+
     var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
+    if (req.body.suchradius == undefined) {
+        res.status(400).json({
+            message: "Missing body in this PUT",
+            missing: "suchradius"
+        })
+        return
+    }
     if (req.body.standort == undefined) {
         res.status(400).json({
             message: "Missing body in this PUT",
@@ -605,8 +632,7 @@ const filterLocation = function (einkaufsliste) {
  * Der Callback wird nach einer Sekunde ausgeführt und diesem wird die veränderte Einkaufsliste wieder mitgegeben,so wird
  * sichergestellt, dass der jeweilige Header erst nach den Requests gesetzt wird
  */
-const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
-
+const updateEinkaufsliste = function (einkaufsliste, suchradius, kundeStandort, callback) {
     // Enthält die Einkaufsliste des Kunden bei den jeweiligen Discountern
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
@@ -616,10 +642,12 @@ const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
         // der Einkaufsliste hinzuzufügen und die Distanz zwischen dem Kunden und des Discounters zu berechnen
         requestAldiServerInformation(function (resultInformation) {
             resultAldiServer.Zusatzinformation = resultInformation;
-            resultAldiServer.Zusatzinformation.Distanz = geolib.getDistance(resultAldiServer.Zusatzinformation.Standort, kundeStandort) / 1000 + " km";
+            resultAldiServer.Zusatzinformation.Distanz = geolib.getDistance(resultAldiServer.Zusatzinformation.Standort, kundeStandort) / 1000;
+            //Die Einkaufsliste für den Discounter Aldi wird nur berücksichtigt, wenn er sich innerhalb des Suchradius des Kunden befindet
+            if (resultAldiServer.Zusatzinformation.Distanz <= suchradius)
+                einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+            saveData();
         })
-        einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-        saveData();
     })
     // Es wird ein request an den Lidl Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
     requestLidlServer(einkaufsliste.produkte, function (resultLidlServer) {
@@ -627,10 +655,13 @@ const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
         // der Einkaufsliste hinzuzufügen und die Distanz zwischen dem Kunden und des Discounters zu berechnen
         requestLidlServerInformation(function (resultInformation) {
             resultLidlServer.Zusatzinformation = resultInformation;
-            resultLidlServer.Zusatzinformation.Distanz = geolib.getDistance(resultLidlServer.Zusatzinformation.Standort, kundeStandort) / 1000 + " km";
+            resultLidlServer.Zusatzinformation.Distanz = geolib.getDistance(resultLidlServer.Zusatzinformation.Standort, kundeStandort) / 1000;
+            //Die Einkaufsliste für den Discounter Aldi wird nur berücksichtigt, wenn er sich innerhalb des Suchradius des Kunden befindet
+            if (resultLidlServer.Zusatzinformation.Distanz <= suchradius)
+                einkaufsliste.einkaufslisteBeiDiscounter.push(resultLidlServer);
+            saveData();
         })
-        einkaufsliste.einkaufslisteBeiDiscounter.push(resultLidlServer);
-        saveData();
+
     })
 
     // Eine Sekunde lang haben die Requests Zeit bearbeitet zu werden
