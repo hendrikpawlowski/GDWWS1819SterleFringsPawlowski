@@ -173,7 +173,9 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
         return;
     }
 
-    updateEinkaufsliste(einkaufsliste, suchradius, standort, function () {
+    updateEinkaufsliste(einkaufsliste, standort, function () {
+
+        filterSuchradius(einkaufsliste, suchradius);
 
         if (req.query.allBio) {
 
@@ -288,6 +290,8 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
     // Die neue Einkaufsliste wird übergeben und dazu noch eine callback-Funktion, die ausgeführt wird,
     updateEinkaufsliste(newEinkaufsliste, standort, function (newEinkaufsliste) {
 
+        filterSuchradius(newEinkaufsliste, suchradius);
+
         // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
         if (req.query.allBio) newEinkaufsliste = filterBio(newEinkaufsliste);
 
@@ -400,6 +404,8 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     einkaufsliste.produkte = req.body.produkte;
 
     updateEinkaufsliste(einkaufsliste, standort, function () {
+
+        filterSuchradius(einkaufsliste, suchradius);
 
         // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
         if (req.query.allBio) einkaufsliste = filterBio(einkaufsliste);
@@ -623,6 +629,20 @@ const filterLocation = function (einkaufsliste) {
     return einkaufsliste;
 }
 
+
+/*
+* filterSuchradius reduziert die Anzahl der Einkaufslisten für die jeweiligen Disounter auf diejenigen,
+* die in dem Suchradius vom Kunden liegen
+* */
+const filterSuchradius = function (einkaufsliste, suchradius) {
+    for (let j = 0; j < einkaufsliste.einkaufslisteBeiDiscounter.length; j++) {
+        if (einkaufsliste.einkaufslisteBeiDiscounter[j].Zusatzinformation.Distanz > suchradius) {
+            einkaufsliste.einkaufslisteBeiDiscounter.splice(j, 1)
+        }
+    }
+    return einkaufsliste;
+}
+
 // REQUESTS AN UNERE SERVER
 
 /*
@@ -632,7 +652,7 @@ const filterLocation = function (einkaufsliste) {
  * Der Callback wird nach einer Sekunde ausgeführt und diesem wird die veränderte Einkaufsliste wieder mitgegeben,so wird
  * sichergestellt, dass der jeweilige Header erst nach den Requests gesetzt wird
  */
-const updateEinkaufsliste = function (einkaufsliste, suchradius, kundeStandort, callback) {
+const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
     // Enthält die Einkaufsliste des Kunden bei den jeweiligen Discountern
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
@@ -643,9 +663,7 @@ const updateEinkaufsliste = function (einkaufsliste, suchradius, kundeStandort, 
         requestAldiServerInformation(function (resultInformation) {
             resultAldiServer.Zusatzinformation = resultInformation;
             resultAldiServer.Zusatzinformation.Distanz = geolib.getDistance(resultAldiServer.Zusatzinformation.Standort, kundeStandort) / 1000;
-            //Die Einkaufsliste für den Discounter Aldi wird nur berücksichtigt, wenn er sich innerhalb des Suchradius des Kunden befindet
-            if (resultAldiServer.Zusatzinformation.Distanz <= suchradius)
-                einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
+            einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
             saveData();
         })
     })
@@ -656,9 +674,7 @@ const updateEinkaufsliste = function (einkaufsliste, suchradius, kundeStandort, 
         requestLidlServerInformation(function (resultInformation) {
             resultLidlServer.Zusatzinformation = resultInformation;
             resultLidlServer.Zusatzinformation.Distanz = geolib.getDistance(resultLidlServer.Zusatzinformation.Standort, kundeStandort) / 1000;
-            //Die Einkaufsliste für den Discounter Aldi wird nur berücksichtigt, wenn er sich innerhalb des Suchradius des Kunden befindet
-            if (resultLidlServer.Zusatzinformation.Distanz <= suchradius)
-                einkaufsliste.einkaufslisteBeiDiscounter.push(resultLidlServer);
+            einkaufsliste.einkaufslisteBeiDiscounter.push(resultLidlServer);
             saveData();
         })
 
