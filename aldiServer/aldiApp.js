@@ -1,12 +1,19 @@
 const express = require('express');
 const aldiApp = express();
 const bodyParser = require("body-parser");
-
 const discounterRoutes = require('./api/resources/sortiment');
+const datenbank = require('./datenbank');
+
 
 aldiApp.use(bodyParser.json());
 
 aldiApp.use('/sortiment', discounterRoutes);
+
+aldiApp.get("/", (req,res) => {
+    res.status(200).json({
+        daten: datenbank
+    })
+});
 
 // ERROR Handling
 aldiApp.use((req, res, next) => {
@@ -25,7 +32,5 @@ aldiApp.use((error, req, res) => {
         }
     })
 });
-
-//Hendrik wenn du das liest, deine Kommentare sind jetzt der hammer :*
 
 module.exports = aldiApp;

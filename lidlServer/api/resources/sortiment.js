@@ -1,21 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const sortiment = require('../../sortimentDatenbank');
+const datenbank = require('../../datenbank');
 
 
-router.get("/information", (req,res) => {
-    res.status(200).json({
-        Standort: [51.021665, 7.5732967],
-        Payback: false,
-        Kaffeautomat: true,
-        Pfandrueckgabe: ["PET"]
-    })
-});
 
 router.get("/",(req,res) => {
 
     res.status(200).json({
-        sortiment: sortiment
+        sortiment: datenbank.sortiment
     });
 });
 
@@ -39,11 +31,11 @@ router.get("/:artikelID",(req,res) => {
 
 const findArtikelByID = function (id) {
 
-    for (let i = 0; i < sortiment.length; i++) {
+    for (let i = 0; i < datenbank.sortiment.length; i++) {
 
-        if (sortiment[i].id === id) {
+        if (datenbank.sortiment[i].id == id) {
 
-            return sortiment[i];
+            return datenbank.sortiment[i];
         }
     }
 

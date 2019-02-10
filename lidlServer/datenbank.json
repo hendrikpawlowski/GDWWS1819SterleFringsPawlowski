@@ -1,0 +1,85 @@
+{
+    "standort": [
+        51.021665,
+        7.5732967
+    ],
+    "payback": false,
+    "kaffeautomat": true,
+    "pfandrueckgabe": [
+        "PET"
+    ],
+    "sortiment": [
+        {
+            "uri": "localhost:3069/sortiment/0",
+            "id": 0,
+            "name": "Apfel",
+            "marke": "Pink Lady",
+            "preis": 1.10,
+            "gramm": 45,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3069/sortiment/1",
+            "id": 1,
+            "name": "Weißbrot",
+            "marke": "Sammy's Sandwich",
+            "preis": 0.69,
+            "gramm": 30,
+            "bio": false
+        },
+        {
+            "uri": "localhost:3069/sortiment/2",
+            "id": 2,
+            "name": "Duplo",
+            "marke": "Kinder",
+            "preis": 1.30,
+            "gramm": 70,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3069/sortiment/3",
+            "id": 3,
+            "name": "Fischstäbchen",
+            "marke": "Iglo",
+            "preis": 1.99,
+            "gramm": 150,
+            "bio": false
+        },
+        {
+            "uri": "localhost:3069/sortiment/4",
+            "id": 4,
+            "name": "Pick Up",
+            "marke": "Leibniz",
+            "preis": 1.19,
+            "gramm": 50,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3069/sortiment/5",
+            "id": 5,
+            "name": "Curry King XXL",
+            "marke": "Meica",
+            "preis": 3.29,
+            "gramm": 120,
+            "bio": false
+        },
+        {
+            "uri": "localhost:3069/sortiment/6",
+            "id": 6,
+            "name": "Paprika Chips",
+            "marke": "Chio",
+            "preis": 1.80,
+            "gramm": 33,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3069/sortiment/7",
+            "id": 7,
+            "name": "Paniermehl",
+            "marke": "fleur",
+            "preis": 2.10,
+            "gramm": 300,
+            "bio": true
+        }
+    ]
+}

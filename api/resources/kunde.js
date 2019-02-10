@@ -9,6 +9,21 @@ const kundenListe = require('../../kundenDatenbank');
 
 const ourUri = "localhost:3001";
 
+// Notwendige Informationen um die Server der beiden Discounter zu erreichen
+const aldiOptions = {
+    host: "localhost",
+    port: 3069,
+    path: "/",
+    method: "GET"
+};
+
+const lidlOptions = {
+    host: "localhost",
+    port: 3070,
+    path: "/",
+    method: "GET"
+};
+
 /*
  * POST Verb auf Kunde
  * Ein neuer Kunde wird angelegt
@@ -92,7 +107,6 @@ router.put("/:kundeID", (req, res, next) => {
         return;
     }
     if (!findKundeByID(kundeID)) {
-
         res.status(404).json({
             message: "404Not Found",
             problem: "Der Kunde mit der ID " + kundeID + " existiert nicht"
@@ -125,7 +139,6 @@ router.delete("/:kundeID", (req, res, next) => {
     }
 
     for (let i = 0; i < kundenListe.length; i++) {
-
         if (kundenListe[i].id == kundeID) {
             kundenListe.splice(i, 1);
             saveData();
@@ -143,27 +156,21 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
     const einkaufslisteID = req.params.einkaufslisteID;
-    const standort = req.body.standort;
-    const suchradius = req.body.suchradius;
-
     var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
 
-    if (req.body.suchradius == undefined) {
-        res.status(400).json({
-            message: "Missing body in this GET",
-            missing: "suchradius"
-        })
-        return
-    }
+    if(req.body.suchradius == undefined || req.body.standort == undefined || req.body.produkte == undefined){
+        
+        var missing = new Array();
+        if(req.body.suchradius == undefined) missing.push("suchradius");
+        if(req.body.standort == undefined) missing.push("standort");
+        if(req.body.produkte == undefined) missing.push("produkte");
 
-    if (req.body.standort == undefined) {
         res.status(400).json({
-            message: "Missing body in this GET",
-            missing: "standort"
+            message: "Missing body in this POST",
+            missing: missing
         })
-        return
+        return;
     }
-
     if (!einkaufsliste) {
 
         res.status(404).json({
@@ -173,29 +180,18 @@ router.get("/:kundeID/einkaufsliste/:einkaufslisteID", (req, res, next) => {
         return;
     }
 
-    updateEinkaufsliste(einkaufsliste, standort, function () {
+    updateEinkaufsliste(einkaufsliste, req.body, function (einkaufsliste) {
 
-        filterSuchradius(einkaufsliste, suchradius);
+        if (req.query.allBio) einkaufsliste = filterBio(einkaufsliste)
 
-        if (req.query.allBio) {
-
-            // Wird im query allBio=true übergeben, so wird die Einkaufsliste für die jeweiligen Dscounter nach Bio-Produkten
-            // gefiltert. Die Einkaufsliste an sich wird NICHT verändert, sie wird nur gefiltert ausgegeben.
-            res.status(200).json({
-                einkaufsliste: filterBio(einkaufsliste)
-            })
-        } else if (req.query.location){
-
-            // Wird im query location=true übergeben, so werden die Einkaufslisten für die jeweiligen Discounter nach der Distanz zum
-            // Kunden sortiert (geringste Distanz als erstes).
-            res.status(200).json({
-                einkaufsliste: filterLocation(einkaufsliste)
-            })
+        if (req.query.sort == "location") {
+            sortByLocation(einkaufsliste);
         } else {
-            res.status(200).json({
-                einkaufsliste: einkaufsliste
-            })
+            sortByGesamtPreis(einkaufsliste);
         }
+        res.status(200).json({
+            einkaufsliste: einkaufsliste
+        })
     })
 })
 
@@ -228,38 +224,19 @@ router.get("/:kundeID/einkaufsliste", (req, res, next) => {
 router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     const kundeID = req.params.kundeID;
-    const standort = req.body.standort;
-    const suchradius = req.body.suchradius;
+    const currentKunde = findKundeByID(kundeID);
+    const newId = generateNewID(currentKunde.einkaufslisten)
 
-    if (req.body.suchradius == undefined) {
-        res.status(400).json({
-            message: "Missing body in this POST",
-            missing: "suchradius"
-        })
-        return
-    }
-
-    if (req.body.standort == undefined) {
-        res.status(400).json({
-            message: "Missing body in this POST",
-            missing: "standort"
-        })
-        return
-    }
-
-    if (req.body.produkte == undefined) {
+    if(req.body.suchradius == undefined || req.body.standort == undefined || req.body.produkte == undefined){
+        
+        var missing = new Array();
+        if(req.body.suchradius == undefined) missing.push("suchradius");
+        if(req.body.standort == undefined) missing.push("standort");
+        if(req.body.produkte == undefined) missing.push("produkte");
 
         res.status(400).json({
             message: "Missing body in this POST",
-            missing: "produkte"
-        })
-        return;
-    }
-    if (req.body.standort == undefined) {
-
-        res.status(400).json({
-            message: "Missing body in this POST",
-            missing: "standort"
+            missing: missing
         })
         return;
     }
@@ -271,10 +248,6 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
         })
         return;
     }
-
-    const currentKunde = findKundeByID(kundeID);
-    const newId = generateNewID(currentKunde.einkaufslisten)
-    // const kundenEinkaufsliste = req.body.produkte;
 
     var newEinkaufsliste = {
         uri: ourUri + req.originalUrl + "/" + newId,
@@ -288,21 +261,19 @@ router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
     // Die Methode updateEinkaufsliste wird ausgeführt
     // Die neue Einkaufsliste wird übergeben und dazu noch eine callback-Funktion, die ausgeführt wird,
-    updateEinkaufsliste(newEinkaufsliste, standort, function (newEinkaufsliste) {
-
-        filterSuchradius(newEinkaufsliste, suchradius);
+    updateEinkaufsliste(newEinkaufsliste, req.body, function (newEinkaufsliste) {
 
         // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
         if (req.query.allBio) newEinkaufsliste = filterBio(newEinkaufsliste);
 
         // Wenn im query location=true übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
         // nach der Distanz sortiert (gerinste Distanz als erstes)
-        if (req.query.location) {
-            newEinkaufsliste = filterLocation(newEinkaufsliste)
+        if (req.query.sort == "location") {
+            sortByLocation(newEinkaufsliste)
         } else {
             // Wenn im query nichts übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
             // nach dem Gesamtpreis sortiert (niedrigste Gesamtpreis als erstes)
-            sortEinkaufslisteBeiDiscounter(newEinkaufsliste);
+            sortByGesamtPreis(newEinkaufsliste);
         }
         saveData();
         res.status(201).json({
@@ -321,7 +292,6 @@ router.delete('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     const einkaufslisteID = req.params.einkaufslisteID;
 
     if (!findEinkaufslisteByID(kundeID, einkaufslisteID)) {
-
         res.status(404).json({
             message: "404 Not Found",
             problem: "Der Kunde oder die Einkaufsliste existiert nicht"
@@ -368,27 +338,20 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
     const einkaufslisteID = req.params.einkaufslisteID;
     const standort = req.body.standort;
     const suchradius = req.body.suchradius;
-
+    const produkte = req.body.produkte;
     var einkaufsliste = findEinkaufslisteByID(kundeID, einkaufslisteID);
+    einkaufsliste.produkte = produkte;
 
-    if (req.body.suchradius == undefined) {
+    if(suchradius == undefined || standort == undefined || produkte == undefined){
+        
+        var missing = new Array();
+        if(suchradius == undefined) missing.push("suchradius");
+        if(standort == undefined) missing.push("standort");
+        if(produkte == undefined) missing.push("produkte");
+
         res.status(400).json({
-            message: "Missing body in this PUT",
-            missing: "suchradius"
-        })
-        return
-    }
-    if (req.body.standort == undefined) {
-        res.status(400).json({
-            message: "Missing body in this PUT",
-            missing: "standort"
-        })
-        return
-    }
-    if (req.body.produkte == undefined) {
-        res.status(400).json({
-            message: "Missing body in this PUT",
-            missing: "produkte"
+            message: "Missing body in this POST",
+            missing: missing
         })
         return;
     }
@@ -401,23 +364,19 @@ router.put('/:kundeID/einkaufsliste/:einkaufslisteID', (req, res, next) => {
         return;
     }
 
-    einkaufsliste.produkte = req.body.produkte;
-
-    updateEinkaufsliste(einkaufsliste, standort, function () {
-
-        filterSuchradius(einkaufsliste, suchradius);
+    updateEinkaufsliste(einkaufsliste, req.body, function (einkaufsliste) {
 
         // Wenn im query allBio=true übergeben wird, so wird die Einkaufsliste nach Bio-Produkten gefiltert
         if (req.query.allBio) einkaufsliste = filterBio(einkaufsliste);
 
         // Wenn im query location=true übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
         // nach der Distanz sortiert (gerinste Distanz als erstes)
-        if (req.query.location) {
-            einkaufsliste = filterLocation(einkaufsliste)
+        if (req.query.sort == "location") {
+            sortByLocation(einkaufsliste);
         } else {
             // Wenn im query nichts übergeben wird, so werden die Einkaufslisten für den jeweiligen Discounter
             // nach dem Gesamtpreis sortiert (niedrigste Gesamtpreis als erstes)
-            sortEinkaufslisteBeiDiscounter(einkaufsliste);
+            sortByGesamtPreis(einkaufsliste);
         }
 
         saveData();
@@ -490,7 +449,7 @@ const sortKundenListe = function () {
 /*
  * sortEinkaufslisteBeiDiscounter ist dazu da die Einkaufslisten für den jeweiligen Discountern nach dem Gesamtpreis zu sortieren
  */
-const sortEinkaufslisteBeiDiscounter = function (currentEinkaufsliste) {
+const sortByGesamtPreis = function (currentEinkaufsliste) {
 
     currentEinkaufsliste.einkaufslisteBeiDiscounter.sort(function (a, b) {
         if (a.gesamtPreis > b.gesamtPreis) {
@@ -504,7 +463,28 @@ const sortEinkaufslisteBeiDiscounter = function (currentEinkaufsliste) {
     });
 };
 
+/*
+ * filterLocation kommt zum Einsatz, wenn im query location=true steht
+ * es wird eine Einkaufsliste eines Kunden übergeben
+ * die Einkaufslisten für die jeweiligen Discounter dieser Einkaufsliste werden dann nach der Distanz
+ * zum Kunden sortiert
+ */
 
+const sortByLocation = function (einkaufsliste) {
+
+    einkaufsliste.einkaufslisteBeiDiscounter.sort(function (a, b) {
+        if (a.distanz) {
+            if (a.distanz > b.distanz) {
+                return 1;
+            }
+            if (a.distanz < b.distanz) {
+                return -1;
+            }
+            // a muss gleich b sein
+            return 0;
+        }
+    });
+}
 
 // Findet Kunden in der kundenListe, anhand der angegebenen ID
 const findKundeByID = function (id) {
@@ -537,42 +517,57 @@ const findEinkaufslisteByID = function (kundeID, einkaufslisteID) {
 }
 
 // Findet Produkte in dem Sortiment des Discounters anhand der angegeben Produkte des Kunden und gibt die Einkaufsliste zurück
-const findProdukteByName = function (discounterName, discounterProdukte, kundeProdukte) {
+const setUpEinkaufslisteByDiscounter = function (discounterName, discounterDaten, kundeProdukte, body) {
 
-    var gesamtPreis = 0;
-    var produkte = new Array();
+    console.log("Hi");
+    console.log("Discounter: " + discounterDaten.standort);
+    console.log("Body: " + body.standort);
+    const distanz = geolib.getDistance(discounterDaten.standort, body.standort) / 1000;
+    console.log("Distanz" + distanz);
 
-    // Es wird jedes Produkt aus dem Sortiment des Discounters durchgegangen
-    for (let i = 0; i < discounterProdukte.length; i++) {
+    if (distanz <= body.suchradius) {
 
-        // Es wird jedes Produkt aus der Einkaufsliste des Kunden durchgegangen
-        for (let j = 0; j < kundeProdukte.length; j++)
+        var gesamtPreis = 0;
+        var produkte = new Array();
+        const discounterProdukte = discounterDaten.sortiment;
 
-            // Wenn das ite Produkt aus dem Sortiment mit dem jten Produkt aus der Einkaufsliste des Kunden übereinstimmt
-            // wird ein neues Produkt erstellt und dem Array produktListe hinzugefügt
-            // In produktListe sind Informationen über die Produkte des Kunden bei dem jeweiligen Discounter drin
-            if (discounterProdukte[i].name.toUpperCase() == kundeProdukte[j].toUpperCase()) {
+        // Es wird jedes Produkt aus dem Sortiment des Discounters durchgegangen
+        for (let i = 0; i < discounterProdukte.length; i++) {
 
-                const newProdukt = {
-                    name: discounterProdukte[i].name,
-                    marke: discounterProdukte[i].marke,
-                    preis: discounterProdukte[i].preis,
-                    gewicht: discounterProdukte[i].gramm,
-                    bio: discounterProdukte[i].bio
+            // Es wird jedes Produkt aus der Einkaufsliste des Kunden durchgegangen
+            for (let j = 0; j < kundeProdukte.length; j++)
+
+                // Wenn das ite Produkt aus dem Sortiment mit dem jten Produkt aus der Einkaufsliste des Kunden übereinstimmt
+                // wird ein neues Produkt erstellt und dem Array produktListe hinzugefügt
+                // In produktListe sind Informationen über die Produkte des Kunden bei dem jeweiligen Discounter drin
+                if (discounterProdukte[i].name.toUpperCase() == kundeProdukte[j].toUpperCase()) {
+
+                    const newProdukt = {
+                        name: discounterProdukte[i].name,
+                        marke: discounterProdukte[i].marke,
+                        preis: discounterProdukte[i].preis,
+                        gewicht: discounterProdukte[i].gramm,
+                        bio: discounterProdukte[i].bio
+                    }
+                    produkte.push(newProdukt);
+                    gesamtPreis += discounterProdukte[i].preis
                 }
-                produkte.push(newProdukt);
-                gesamtPreis += discounterProdukte[i].preis
-            }
+        }
+
+        var einkaufsliste = {
+            name: discounterName,
+            gesamtPreis: gesamtPreis.toFixed(2),
+            anzahlNichtGefundenerProdukte: kundeProdukte.length - produkte.length,
+            distanz: distanz,
+            standort: discounterDaten.standort,
+            produkte: produkte,
+            payback: discounterDaten.payback,
+            kaffeautomat: discounterDaten.kaffeautomat,
+            pfandrueckgabe: discounterDaten.pfandrueckgabe
+        };
+
+        return einkaufsliste;
     }
-
-    var einkaufsliste = {
-        name: discounterName,
-        gesamtPreis: gesamtPreis.toFixed(2),
-        anzahlNichtGefundenerProdukte: kundeProdukte.length - produkte.length,
-        produkte: produkte
-    };
-
-    return einkaufsliste;
 }
 
 // Filter-Funktionen für QUERIES
@@ -585,12 +580,13 @@ const findProdukteByName = function (discounterName, discounterProdukte, kundePr
  */
 const filterBio = function (einkaufsliste) {
 
-    for (let j = 0; j < einkaufsliste.einkaufslisteBeiDiscounter.length; j++) {
+    const einkaufslisteBeiDiscounter = einkaufsliste.einkaufslisteBeiDiscounter;
+
+    for (let j = 0; j < einkaufslisteBeiDiscounter.length; j++) {
 
         var bioProdukte = new Array();
         var gesamtPreis = 0;
-        const anzahlNichtGefundenerProdukte = einkaufsliste.einkaufslisteBeiDiscounter[j].anzahlNichtGefundenerProdukte;
-        const produkte = einkaufsliste.einkaufslisteBeiDiscounter[j].produkte;
+        const produkte = einkaufslisteBeiDiscounter[j].produkte;
 
         for (let i = 0; i < produkte.length; i++) {
             console.log(produkte[i]);
@@ -599,46 +595,9 @@ const filterBio = function (einkaufsliste) {
                 gesamtPreis += produkte[i].preis;
             }
         }
-        einkaufsliste.einkaufslisteBeiDiscounter[j].gesamtPreis = gesamtPreis.toFixed(2);
-        einkaufsliste.einkaufslisteBeiDiscounter[j].anzahlNichtGefundenerProdukte = anzahlNichtGefundenerProdukte + (einkaufsliste.produkte.length - bioProdukte.length);
-        einkaufsliste.einkaufslisteBeiDiscounter[j].produkte = bioProdukte;
-    }
-    return einkaufsliste;
-}
-
-/*
- * filterLocation kommt zum Einsatz, wenn im query location=true steht
- * es wird eine Einkaufsliste eines Kunden übergeben
- * die Einkaufslisten für die jeweiligen Discounter dieser Einkaufsliste werden dann nach der Distanz
- * zum Kunden sortiert
- */
-
-const filterLocation = function (einkaufsliste) {
-    einkaufsliste.einkaufslisteBeiDiscounter.sort(function (a, b) {
-        if (a.Zusatzinformation.Distanz ) {
-            if (a.Zusatzinformation.Distanz > b.Zusatzinformation.Distanz) {
-                return 1;
-            }
-            if (a.Zusatzinformation.Distanz < b.Zusatzinformation.Distanz) {
-                return -1;
-            }
-            // a muss gleich b sein
-            return 0;
-        }
-    });
-    return einkaufsliste;
-}
-
-
-/*
-* filterSuchradius reduziert die Anzahl der Einkaufslisten für die jeweiligen Disounter auf diejenigen,
-* die in dem Suchradius vom Kunden liegen
-* */
-const filterSuchradius = function (einkaufsliste, suchradius) {
-    for (let j = 0; j < einkaufsliste.einkaufslisteBeiDiscounter.length; j++) {
-        if (einkaufsliste.einkaufslisteBeiDiscounter[j].Zusatzinformation.Distanz > suchradius) {
-            einkaufsliste.einkaufslisteBeiDiscounter.splice(j, 1)
-        }
+        einkaufslisteBeiDiscounter[j].gesamtPreis = gesamtPreis.toFixed(2);
+        einkaufslisteBeiDiscounter[j].anzahlNichtGefundenerProdukte = einkaufsliste.produkte.length - bioProdukte.length;
+        einkaufslisteBeiDiscounter[j].produkte = bioProdukte;
     }
     return einkaufsliste;
 }
@@ -652,32 +611,23 @@ const filterSuchradius = function (einkaufsliste, suchradius) {
  * Der Callback wird nach einer Sekunde ausgeführt und diesem wird die veränderte Einkaufsliste wieder mitgegeben,so wird
  * sichergestellt, dass der jeweilige Header erst nach den Requests gesetzt wird
  */
-const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
+const updateEinkaufsliste = function (einkaufsliste, body, callback) {
+
     // Enthält die Einkaufsliste des Kunden bei den jeweiligen Discountern
     einkaufsliste.einkaufslisteBeiDiscounter = [];
 
-    // Es wird ein request an den Aldi Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
-    requestAldiServer(einkaufsliste.produkte, function (resultAldiServer) {
-        // Es wird ein request an den Aldi Server mit einem anderen Path gesendet, um die Zusatzinformationen des Discounters
-        // der Einkaufsliste hinzuzufügen und die Distanz zwischen dem Kunden und des Discounters zu berechnen
-        requestAldiServerInformation(function (resultInformation) {
-            resultAldiServer.Zusatzinformation = resultInformation;
-            resultAldiServer.Zusatzinformation.Distanz = geolib.getDistance(resultAldiServer.Zusatzinformation.Standort, kundeStandort) / 1000;
-            einkaufsliste.einkaufslisteBeiDiscounter.push(resultAldiServer);
-            saveData();
-        })
-    })
-    // Es wird ein request an den Lidl Server gesendet und das result wird in dem Array einkaufslisteBeiDiscounter gespeichert
-    requestLidlServer(einkaufsliste.produkte, function (resultLidlServer) {
-        // Es wird ein request an den Lidl Server mit einem anderen Path gesendet, um die Zusatzinformationen des Discounters
-        // der Einkaufsliste hinzuzufügen und die Distanz zwischen dem Kunden und des Discounters zu berechnen
-        requestLidlServerInformation(function (resultInformation) {
-            resultLidlServer.Zusatzinformation = resultInformation;
-            resultLidlServer.Zusatzinformation.Distanz = geolib.getDistance(resultLidlServer.Zusatzinformation.Standort, kundeStandort) / 1000;
-            einkaufsliste.einkaufslisteBeiDiscounter.push(resultLidlServer);
-            saveData();
-        })
+    requestDiscounter(aldiOptions, function (discounterDaten) {
 
+        einkaufslisteBeiAldi = setUpEinkaufslisteByDiscounter("Aldi", discounterDaten, einkaufsliste.produkte, body);
+        if (einkaufslisteBeiAldi != null) einkaufsliste.einkaufslisteBeiDiscounter.push(einkaufslisteBeiAldi);
+        saveData();
+    })
+
+    requestDiscounter(lidlOptions, function (discounterDaten) {
+
+        einkaufslisteBeiLidl = setUpEinkaufslisteByDiscounter("Lidl", discounterDaten, einkaufsliste.produkte, body);
+        if (einkaufslisteBeiLidl != null) einkaufsliste.einkaufslisteBeiDiscounter.push(einkaufslisteBeiLidl);
+        saveData();
     })
 
     // Eine Sekunde lang haben die Requests Zeit bearbeitet zu werden
@@ -688,14 +638,7 @@ const updateEinkaufsliste = function (einkaufsliste, kundeStandort, callback) {
     }, 1000);
 }
 
-const requestLidlServer = function (kundenEinkaufsliste, callback) {
-    // Notwendige Informtionen, um Server per http.request anzusprechen
-    const options = {
-        host: "localhost",
-        port: 3069,
-        path: "/sortiment",
-        method: "GET"
-    };
+const requestDiscounter = function (options, callback) {
 
     var request = http.request(options, function (res2) {
 
@@ -706,9 +649,8 @@ const requestLidlServer = function (kundenEinkaufsliste, callback) {
         });
 
         res2.on("end", function () {
-            const sortiment = JSON.parse(body).sortiment;
-            produkteArray = findProdukteByName("Lidl", sortiment, kundenEinkaufsliste);
-            callback(produkteArray);
+            const data = JSON.parse(body).daten;
+            callback(data);
         });
 
     });
@@ -719,109 +661,6 @@ const requestLidlServer = function (kundenEinkaufsliste, callback) {
     });
 
     request.end();
-}
-
-const requestAldiServer = function (kundenEinkaufsliste, callback) {
-
-    // Notwendige Informtionen, um Server per http.request anzusprechen
-    const options = {
-        host: "localhost",
-        port: 3070,
-        path: "/sortiment",
-        method: "GET"
-    };
-
-    var request = http.request(options, function (res2) {
-
-        var body = "";
-
-        res2.on("data", function (content) {
-            body += content;
-        });
-
-        res2.on("end", function () {
-            const sortiment = JSON.parse(body).sortiment;
-            produkteArray = findProdukteByName("Aldi", sortiment, kundenEinkaufsliste);
-            callback(produkteArray);
-        });
-
-    });
-
-    // Server konnte nicht erreicht werden
-    request.on("error", function (err) {
-        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
-    });
-
-    request.end();
-
-}
-
-const requestAldiServerInformation = function (callback) {
-
-    // Notwendige Informtionen, um Server per http.request anzusprechen
-    const options = {
-        host: "localhost",
-        port: 3070,
-        path: "/sortiment/information",
-        method: "GET"
-    };
-
-    var request = http.request(options, function (res2) {
-
-        var body = "";
-
-        res2.on("data", function (content) {
-            body += content;
-        });
-
-        res2.on("end", function () {
-            const information = JSON.parse(body);
-            callback(information);
-        });
-
-    });
-
-    // Server konnte nicht erreicht werden
-    request.on("error", function (err) {
-        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
-    });
-
-    request.end();
-
-}
-
-const requestLidlServerInformation = function (callback) {
-
-    // Notwendige Informtionen, um Server per http.request anzusprechen
-    const options = {
-        host: "localhost",
-        port: 3069,
-        path: "/sortiment/information",
-        method: "GET"
-    };
-
-    var request = http.request(options, function (res2) {
-
-        var body = "";
-
-        res2.on("data", function (content) {
-            body += content;
-        });
-
-        res2.on("end", function () {
-            const information = JSON.parse(body);
-            callback(information);
-        });
-
-    });
-
-    // Server konnte nicht erreicht werden
-    request.on("error", function (err) {
-        console.log("Server " + options.host + ":" + options.port + "" + options.path + " wurde nicht erreicht");
-    });
-
-    request.end();
-
 }
 
 module.exports = router;

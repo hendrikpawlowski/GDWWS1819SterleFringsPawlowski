@@ -1,12 +1,18 @@
 const express = require('express');
 const lidlApp = express();
 const bodyParser = require("body-parser");
-
 const discounterRoutes = require('./api/resources/sortiment');
+const datenbank = require('./datenbank');
 
 lidlApp.use(bodyParser.json());
 
 lidlApp.use('/sortiment', discounterRoutes);
+
+lidlApp.get("/", (req, res) => {
+    res.status(200).json({
+        daten: datenbank
+    })
+});
 
 // ERROR Handling
 lidlApp.use((req, res, next) => {

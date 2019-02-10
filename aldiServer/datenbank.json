@@ -1,0 +1,86 @@
+{
+    "standort": [
+        50.9817728,
+        7.5306468
+    ],
+    "payback": false,
+    "kaffeautomat": true,
+    "pfandrueckgabe": [
+        "PET",
+        "Glas"
+    ],
+    "sortiment": [
+        {
+            "uri": "localhost:3070/sortiment/0",
+            "id": 0,
+            "name": "Apfel",
+            "marke": "Pink Lady",
+            "preis": 3.00,
+            "gramm": 10,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3070/sortiment/1",
+            "id": 1,
+            "name": "Weißbrot",
+            "marke": "Sammy's Sandwich",
+            "preis": 1.10,
+            "gramm": 40,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3070/sortiment/2",
+            "id": 2,
+            "name": "Duplo",
+            "marke": "Kinder",
+            "preis": 1.60,
+            "gramm": 75,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3070/sortiment/3",
+            "id": 3,
+            "name": "Fischstäbchen",
+            "marke": "Iglo",
+            "preis": 2.49,
+            "gramm": 150,
+            "bio": false
+        },
+        {
+            "uri": "localhost:3070/sortiment/4",
+            "id": 4,
+            "name": "Pick Up",
+            "marke": "Leibniz",
+            "preis": 0.89,
+            "gramm": 50,
+            "bio": true
+        },
+        {
+            "uri": "localhost:3070/sortiment/5",
+            "id": 5,
+            "name": "Curry King XXL",
+            "marke": "Meica",
+            "preis": 0.10,
+            "gramm": 120,
+            "bio": false
+        },
+        {
+            "uri": "localhost:3070/sortiment/6",
+            "id": 6,
+            "name": "Paprika Chips",
+            "marke": "Chio",
+            "preis": 1.40,
+            "gramm": 33,
+            "bio": false
+        },
+        {
+            "uri": "localhost:3070/sortiment/7",
+            "id": 7,
+            "name": "Paniermehl",
+            "marke": "fleur",
+            "preis": 1.19,
+            "gramm": 300,
+            "bio": true
+        }
+    ]
+}
