@@ -73,9 +73,6 @@ const setUpEinkaufslisteByDiscounter = function (discounterName, discounterDaten
         var produkte = new Array();
         const discounterProdukte = discounterDaten.sortiment;
 
-        console.log("Kunde: " + kundeProdukte);
-        console.log("Discounter: " + discounterProdukte);
-
         // Es wird jedes Produkt aus dem Sortiment des Discounters durchgegangen
         for (let i = 0; i < kundeProdukte.length; i++) {
 
@@ -85,7 +82,7 @@ const setUpEinkaufslisteByDiscounter = function (discounterName, discounterDaten
                 // Wenn das ite Produkt aus dem Sortiment mit dem jten Produkt aus der Einkaufsliste des Kunden übereinstimmt
                 // wird ein neues Produkt erstellt und dem Array produktListe hinzugefügt
                 // In produktListe sind Informationen über die Produkte des Kunden bei dem jeweiligen Discounter drin
-                if (kundeProdukte[i].name.toUpperCase() == discounterProdukte[j].toUpperCase()) {
+                if (kundeProdukte[i].toUpperCase() == discounterProdukte[j].name.toUpperCase()) {
 
                     const newProdukt = {
                         name: discounterProdukte[i].name,
