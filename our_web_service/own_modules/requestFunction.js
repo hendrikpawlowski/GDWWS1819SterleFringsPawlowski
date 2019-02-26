@@ -85,14 +85,14 @@ const setUpEinkaufslisteByDiscounter = function (discounterName, discounterDaten
                 if (kundeProdukte[i].toUpperCase() == discounterProdukte[j].name.toUpperCase()) {
 
                     const newProdukt = {
-                        name: discounterProdukte[i].name,
-                        marke: discounterProdukte[i].marke,
-                        preis: discounterProdukte[i].preis,
-                        gewicht: discounterProdukte[i].gramm,
-                        bio: discounterProdukte[i].bio
+                        name: discounterProdukte[j].name,
+                        marke: discounterProdukte[j].marke,
+                        preis: discounterProdukte[j].preis,
+                        gewicht: discounterProdukte[j].gramm,
+                        bio: discounterProdukte[j].bio
                     }
                     produkte.push(newProdukt);
-                    gesamtPreis += discounterProdukte[i].preis
+                    gesamtPreis += discounterProdukte[j].preis
                 }
         }
 

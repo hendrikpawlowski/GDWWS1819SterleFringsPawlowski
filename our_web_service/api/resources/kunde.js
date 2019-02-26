@@ -217,8 +217,6 @@ router.get("/:kundeID/einkaufsliste", (req, res, next) => {
  */
 router.post("/:kundeID/einkaufsliste", (req, res, next) => {
 
-    console.log("POST");
-
     const kundeID = req.params.kundeID;
     const currentKunde = helpFunction.findKundeByID(kundenListe, kundeID);
 
