@@ -23,6 +23,6 @@
     "geolocation": "^0.2.0",
     "node-static": "^0.7.11",
     "request": "^2.88.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.5.0"
   }
 }
